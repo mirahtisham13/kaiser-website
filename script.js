@@ -1,146 +1,113 @@
-/* ===================================================
-   Dr. Kaiser's Dental Clinic – Interactive Script
-   =================================================== */
-
+/* === Dr. Kaiser Dental – JS === */
 document.addEventListener('DOMContentLoaded', () => {
-    // ---- DOM References ----
     const header = document.getElementById('header');
     const menuToggle = document.getElementById('menuToggle');
     const nav = document.getElementById('nav');
     const stickyBar = document.getElementById('stickyBar');
-    const faqItems = document.querySelectorAll('.faq__item');
-    const navLinks = document.querySelectorAll('.header__link');
+    const darkToggle = document.getElementById('darkToggle');
 
-    // ---- Mobile Nav Overlay ----
-    const overlay = document.createElement('div');
-    overlay.classList.add('nav-overlay');
+    // Nav overlay
+    let overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
     document.body.appendChild(overlay);
 
-    // ---- Mobile Menu Toggle ----
+    // Mobile menu
     function toggleMenu() {
-        const isOpen = nav.classList.toggle('is-open');
-        menuToggle.classList.toggle('is-active', isOpen);
-        overlay.classList.toggle('is-active', isOpen);
-        document.body.style.overflow = isOpen ? 'hidden' : '';
+        const open = nav.classList.toggle('is-open');
+        menuToggle.classList.toggle('is-active', open);
+        overlay.classList.toggle('is-active', open);
+        document.body.style.overflow = open ? 'hidden' : '';
     }
-
     menuToggle.addEventListener('click', toggleMenu);
     overlay.addEventListener('click', toggleMenu);
+    nav.querySelectorAll('.header__link').forEach(l => l.addEventListener('click', () => {
+        if (nav.classList.contains('is-open')) toggleMenu();
+    }));
 
-    // Close menu on nav link click
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (nav.classList.contains('is-open')) {
-                toggleMenu();
-            }
+    // Sticky header + bar
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        header.classList.toggle('is-scrolled', y > 50);
+        if (stickyBar) stickyBar.classList.toggle('is-visible', y > 400);
+        lastScroll = y;
+    }, { passive: true });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq__question').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const item = btn.parentElement;
+            const wasOpen = item.classList.contains('is-open');
+            document.querySelectorAll('.faq__item.is-open').forEach(i => i.classList.remove('is-open'));
+            if (!wasOpen) item.classList.add('is-open');
+            btn.setAttribute('aria-expanded', !wasOpen);
         });
     });
 
-    // ---- Header Scroll Effect ----
-    let lastScrollY = 0;
+    // Scroll animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
 
-    function onScroll() {
-        const scrollY = window.scrollY;
+    // Dark mode
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') setTheme('dark');
 
-        // Header scroll state
-        header.classList.toggle('is-scrolled', scrollY > 50);
+    darkToggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        setTheme(current === 'dark' ? 'light' : 'dark');
+    });
 
-        // Sticky bar visibility (only on mobile)
-        if (window.innerWidth < 1024) {
-            stickyBar.classList.toggle('is-visible', scrollY > 500);
+    // Before/After Image Sliders
+    document.querySelectorAll('[data-slider]').forEach(slider => {
+        const overlay = slider.querySelector('.img-slider__overlay');
+        const handle = slider.querySelector('.img-slider__handle');
+        const overlayImg = overlay.querySelector('img');
+        let isDragging = false;
+
+        function setPosition(x) {
+            const rect = slider.getBoundingClientRect();
+            let pct = ((x - rect.left) / rect.width) * 100;
+            pct = Math.max(2, Math.min(98, pct));
+            overlay.style.width = pct + '%';
+            handle.style.left = pct + '%';
+            // Keep overlay image at container width so it aligns with background
+            overlayImg.style.width = rect.width + 'px';
         }
 
-        lastScrollY = scrollY;
-    }
+        function onStart(e) {
+            isDragging = true;
+            const cx = e.touches ? e.touches[0].clientX : e.clientX;
+            setPosition(cx);
+        }
+        function onMove(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            const cx = e.touches ? e.touches[0].clientX : e.clientX;
+            setPosition(cx);
+        }
+        function onEnd() { isDragging = false; }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll(); // Run on load
+        slider.addEventListener('mousedown', onStart);
+        slider.addEventListener('touchstart', onStart, { passive: true });
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('touchmove', onMove, { passive: false });
+        document.addEventListener('mouseup', onEnd);
+        document.addEventListener('touchend', onEnd);
 
-    // ---- FAQ Accordion ----
-    faqItems.forEach(item => {
-        const btn = item.querySelector('.faq__question');
-        btn.addEventListener('click', () => {
-            const isOpen = item.classList.contains('is-open');
-
-            // Close all others
-            faqItems.forEach(other => {
-                if (other !== item) other.classList.remove('is-open');
-                other.querySelector('.faq__question').setAttribute('aria-expanded', 'false');
-            });
-
-            // Toggle current
-            item.classList.toggle('is-open', !isOpen);
-            btn.setAttribute('aria-expanded', !isOpen);
-        });
+        // Init overlay image width on load/resize
+        function initSize() {
+            const w = slider.getBoundingClientRect().width;
+            overlayImg.style.width = w + 'px';
+        }
+        const bgImg = slider.querySelector('.img-slider__bg');
+        if (bgImg.complete) initSize();
+        bgImg.addEventListener('load', initSize);
+        window.addEventListener('resize', initSize);
     });
-
-    // ---- Scroll Animations (Intersection Observer) ----
-    const animatedElements = document.querySelectorAll('[data-animate]');
-
-    if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            },
-            {
-                threshold: 0.1,
-                rootMargin: '0px 0px -60px 0px'
-            }
-        );
-
-        animatedElements.forEach(el => observer.observe(el));
-    } else {
-        // Fallback: show all immediately
-        animatedElements.forEach(el => el.classList.add('is-visible'));
-    }
-
-    // ---- Smooth Scroll for anchor links ----
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-
-            const target = document.querySelector(targetId);
-            if (target) {
-                e.preventDefault();
-                const headerOffset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 72;
-                const elementPosition = target.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.scrollY - headerOffset;
-
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // ---- Active Nav Link Highlight ----
-    const sections = document.querySelectorAll('section[id]');
-
-    function highlightNav() {
-        const scrollY = window.scrollY + 100;
-
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-
-            if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-                navLinks.forEach(link => {
-                    link.classList.remove('is-active-link');
-                    if (link.getAttribute('href') === `#${sectionId}`) {
-                        link.classList.add('is-active-link');
-                    }
-                });
-            }
-        });
-    }
-
-    window.addEventListener('scroll', highlightNav, { passive: true });
 });
