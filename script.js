@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.getElementById('header');
     const menuToggle = document.getElementById('menuToggle');
     const nav = document.getElementById('nav');
-    const stickyBar = document.getElementById('stickyBar');
     const darkToggle = document.getElementById('darkToggle');
 
     // Nav overlay
@@ -24,14 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (nav.classList.contains('is-open')) toggleMenu();
     }));
 
-    // Sticky header + bar
-    let lastScroll = 0;
+    // Sticky header + back to top
+    const backToTop = document.getElementById('backToTop');
     window.addEventListener('scroll', () => {
         const y = window.scrollY;
         header.classList.toggle('is-scrolled', y > 50);
-        if (stickyBar) stickyBar.classList.toggle('is-visible', y > 400);
-        lastScroll = y;
+        if (backToTop) backToTop.classList.toggle('is-visible', y > 600);
     }, { passive: true });
+
+    // Back to top click
+    if (backToTop) backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
     // FAQ accordion
     document.querySelectorAll('.faq__question').forEach(btn => {

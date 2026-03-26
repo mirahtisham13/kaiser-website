@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dr. Kaiser's Multispeciality Dental Clinic Vilgam | Trusted Dentist in Vilgam</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2C11 2 8 5 7 8C6 11 6 14 8 17C10 20 13 24 16 30C19 24 22 20 24 17C26 14 26 11 25 8C24 5 21 2 16 2Z' fill='%232563eb'/%3E%3C/svg%3E">
     <meta name="description"
         content="Dr. Kaiser's Multispeciality Dental Clinic in Vilgam, J&K offers affordable dental care — implants, braces, smile makeovers & more. Book your appointment today.">
     <meta name="keywords"
@@ -31,7 +33,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="preload" href="images/doctor.png" as="image">
+    <link rel="stylesheet" href="style.css?v=4">
 </head>
 
 <body>
@@ -158,34 +161,34 @@
                 <p class="section-desc">From routine check-ups to advanced procedures — for the whole family.</p>
             </div>
             <div class="services__grid" data-animate="fade-up">
-                <div class="service-card">
+                <div class="service-card" data-animate="fade-up" style="transition-delay:.05s">
                     <h3 class="service-card__title">😁 Smile Makeovers</h3>
                     <p class="service-card__desc">Customised cosmetic treatments for a beautiful, natural-looking smile.
                     </p>
                 </div>
-                <div class="service-card">
+                <div class="service-card" data-animate="fade-up" style="transition-delay:.1s">
                     <h3 class="service-card__title">🦷 Dental Implants</h3>
                     <p class="service-card__desc">Permanent, strong replacements for missing teeth that look and feel
                         natural.</p>
                 </div>
-                <div class="service-card">
+                <div class="service-card" data-animate="fade-up" style="transition-delay:.15s">
                     <h3 class="service-card__title">🔗 Braces & Orthodontics</h3>
                     <p class="service-card__desc">Comfortable braces for children and adults to straighten your teeth.
                     </p>
                 </div>
-                <div class="service-card">
+                <div class="service-card" data-animate="fade-up" style="transition-delay:.2s">
                     <h3 class="service-card__title">👑 Crown & Bridge</h3>
                     <p class="service-card__desc">Durable crowns and bridges to restore damaged or missing teeth.</p>
                 </div>
-                <div class="service-card">
+                <div class="service-card" data-animate="fade-up" style="transition-delay:.25s">
                     <h3 class="service-card__title">🩹 Tooth Extraction</h3>
                     <p class="service-card__desc">Safe and gentle tooth removal with minimal discomfort.</p>
                 </div>
-                <div class="service-card">
+                <div class="service-card" data-animate="fade-up" style="transition-delay:.3s">
                     <h3 class="service-card__title">🏥 General Dentistry</h3>
                     <p class="service-card__desc">Regular check-ups, cleanings, fillings, and preventive care.</p>
                 </div>
-                <div class="service-card">
+                <div class="service-card" data-animate="fade-up" style="transition-delay:.35s">
                     <h3 class="service-card__title">🦿 Prosthetic Rehabilitation</h3>
                     <p class="service-card__desc">Custom-fitted dentures for a natural feel and appearance.</p>
                 </div>
@@ -506,8 +509,6 @@
                     <ul>
                         <li><a href="tel:+917889439422">📞 +91 7889439422</a></li>
                         <li><a href="mailto:kaisermir04@gmail.com">📧 kaisermir04@gmail.com</a></li>
-                        <li>📍 Near Main Market, Vilgam, J&K – 193224</li>
-                        <li>🕐 9:00 AM – 6:00 PM (Everyday)</li>
                     </ul>
                 </div>
                 <div class="footer__links">
@@ -518,7 +519,7 @@
                         <li><a href="#gallery">Gallery</a></li>
                         <li><a href="#testimonials">Reviews</a></li>
                         <li><a href="#location">Location</a></li>
-                        <li><a href="#appointment">Book Appointment</a></li>
+
                     </ul>
                 </div>
                 <div class="footer__social">
@@ -531,20 +532,17 @@
                         <a href="https://x.com/kaisermir04" target="_blank" rel="noopener noreferrer" aria-label="X"
                             class="footer__social-link">X</a>
                     </div>
-                    <a href="https://wa.me/917889439422?text=Hello%20I%20want%20to%20book%20an%20appointment%20at%20Dr%20Kaiser%20Dental%20Clinic%20Vilgam"
-                        target="_blank" rel="noopener noreferrer" class="btn btn--whatsapp btn--sm">💬 WhatsApp Us</a>
                 </div>
             </div>
             <div class="footer__bottom">
-                <p>&copy; 2025 Dr. Kaiser's Multispeciality Dental Clinic Vilgam. All rights reserved.</p>
+                <p>&copy; 2026 Dr. Kaiser's Multispeciality Dental Clinic Vilgam. All rights reserved.</p>
                 <p class="footer__credit">Developed by Ahtisham Mir · <a
                         href="mailto:mirahtisham13@gmail.com">mirahtisham13@gmail.com</a></p>
             </div>
         </div>
     </footer>
 
-    <!-- FLOATING ELEMENTS -->
-    <div class="sticky-bar" id="stickyBar"><a href="#appointment" class="sticky-bar__btn">📅 Book Appointment</a></div>
+
     <a href="https://wa.me/917889439422?text=Hello%20I%20want%20to%20book%20an%20appointment%20at%20Dr%20Kaiser%20Dental%20Clinic%20Vilgam"
         target="_blank" rel="noopener noreferrer" class="whatsapp-float" id="whatsappFloat"
         aria-label="Chat on WhatsApp">
@@ -554,7 +552,14 @@
         </svg>
     </a>
 
-    <script src="script.js?v=3"></script>
+    <!-- BACK TO TOP -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="18 15 12 9 6 15" />
+        </svg>
+    </button>
+
+    <script src="script.js?v=4"></script>
 </body>
 
 </html>
