@@ -97,9 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
         function onEnd() { isDragging = false; }
 
         slider.addEventListener('mousedown', onStart);
-        slider.addEventListener('touchstart', onStart, { passive: true });
+        slider.addEventListener('touchstart', onStart, { passive: false });
         document.addEventListener('mousemove', onMove);
-        document.addEventListener('touchmove', onMove, { passive: false });
+        slider.addEventListener('touchmove', onMove, { passive: false });
         document.addEventListener('mouseup', onEnd);
         document.addEventListener('touchend', onEnd);
 
