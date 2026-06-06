@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Cases – Dr. Kaiser Admin</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+<!-- Mobile overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- Delete confirmation modal -->
+<div class="modal-backdrop" id="deleteModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+        <div class="modal__header">
+            <div>
+                <div class="modal__icon">🗑️</div>
+                <h2 class="modal__title" id="deleteModalTitle">Delete Case?</h2>
+            </div>
+            <button class="modal__close" onclick="closeDeleteModal()" aria-label="Close">×</button>
+        </div>
+        <div class="modal__body">
+            <p>Are you sure you want to delete <strong id="deleteModalCaseName"></strong>?</p>
+            <p style="margin-top:8px;">This will permanently remove the case and all its images. This action cannot be undone.</p>
+        </div>
+        <div class="modal__footer">
+            <button class="btn btn--ghost" onclick="closeDeleteModal()">Cancel</button>
+            <button class="btn btn--danger-filled" id="confirmDeleteBtn" onclick="confirmDelete()">
+                Delete Case
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="admin-layout">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+        <a href="dashboard.html" class="sidebar__logo">
+            <div class="sidebar__logo-icon">🦷</div>
+            <div>
+                <span class="sidebar__logo-name">Dr. Kaiser's Dental</span>
+                <span class="sidebar__logo-sub">Admin Dashboard</span>
+            </div>
+        </a>
+        <nav class="sidebar__nav">
+            <span class="sidebar__section-label">Main</span>
+            <a href="dashboard.html" class="sidebar__link">
+                <span class="sidebar__link-icon">📊</span> Dashboard
+            </a>
+            <a href="cases.html" class="sidebar__link is-active">
+                <span class="sidebar__link-icon">🦷</span> All Cases
+            </a>
+            <a href="case-form.html" class="sidebar__link">
+                <span class="sidebar__link-icon">➕</span> Add New Case
+            </a>
+            <div class="sidebar__divider"></div>
+            <span class="sidebar__section-label">Site</span>
+            <a href="../index.html" class="sidebar__link" target="_blank" rel="noopener">
+                <span class="sidebar__link-icon">🏠</span> View Homepage
+            </a>
+            <a href="../cases.html" class="sidebar__link" target="_blank" rel="noopener">
+                <span class="sidebar__link-icon">📋</span> Public Cases Page
+            </a>
+            <div class="sidebar__divider"></div>
+            <button class="sidebar__link sidebar__link--danger" onclick="logout()">
+                <span class="sidebar__link-icon">🚪</span> Logout
+            </button>
+        </nav>
+        <div class="sidebar__user">
+            <div class="sidebar__user-avatar" id="userInitial">A</div>
+            <div class="sidebar__user-info">
+                <div class="sidebar__user-label">Logged in as</div>
+                <div class="sidebar__user-email" id="adminEmail">Loading…</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN WRAPPER ===== -->
+    <div class="main-wrapper">
+
+        <header class="topbar">
+            <div class="topbar__left">
+                <button class="topbar__menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+                <h1 class="topbar__title">All Cases</h1>
+            </div>
+            <div class="topbar__right">
+                <a href="case-form.html" class="btn btn--primary btn--sm">➕ Add Case</a>
+            </div>
+        </header>
+
+        <main class="main-content">
+
+            <div class="page-header">
+                <div class="page-header__text">
+                    <h1>Dental Cases</h1>
+                    <p>Manage, edit, and publish your dental case studies.</p>
+                </div>
+                <a href="case-form.html" class="btn btn--primary">➕ Add New Case</a>
+            </div>
+
+            <!-- Filter bar -->
+            <div class="filter-bar" id="filterBar">
+                <div class="search-input-wrap">
+                    <input type="search" class="form-control" id="searchInput"
+                           placeholder="Search by title…" oninput="debounceLoad()">
+                </div>
+                <select class="form-control" id="statusFilter" onchange="loadCases()">
+                    <option value="all">All Statuses</option>
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                </select>
+                <select class="form-control" id="categoryFilter" onchange="loadCases()">
+                    <option value="all">All Categories</option>
+                    <option value="Smile Makeovers">Smile Makeovers</option>
+                    <option value="Dental Implants">Dental Implants</option>
+                    <option value="Braces & Orthodontics">Braces & Orthodontics</option>
+                    <option value="Crown & Bridge">Crown & Bridge</option>
+                    <option value="Tooth Extraction">Tooth Extraction</option>
+                    <option value="General Dentistry">General Dentistry</option>
+                    <option value="Prosthetic Rehabilitation">Prosthetic Rehabilitation</option>
+                </select>
+            </div>
+
+            <!-- Cases table -->
+            <div class="card">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:50px;"></th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Featured</th>
+                                <th>Date</th>
+                                <th style="text-align:right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="casesTableBody">
+                            <tr>
+                                <td colspan="7" class="loading-state">
+                                    <span class="spinner spinner--dark"></span> Loading cases…
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Results count -->
+            <p id="resultsCount" style="margin-top:10px; font-size:13px; color:var(--text-l);"></p>
+
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/cases.js"></script>
+<script>
+/* ---- State ---- */
+let pendingDeleteId   = null;
+let pendingDeleteName = '';
+let debounceTimer     = null;
+
+/* ---- Init ---- */
+document.addEventListener('DOMContentLoaded', async () => {
+    const session = await checkAuth();
+    if (!session) return;
+    await updateUserDisplay();
+    await loadCases();
+});
+
+/* ---- Load & render cases ---- */
+async function loadCases() {
+    const tbody = document.getElementById('casesTableBody');
+    tbody.innerHTML = `<tr><td colspan="7" class="loading-state">
+        <span class="spinner spinner--dark"></span> Loading…</td></tr>`;
+
+    const filters = {
+        status:   document.getElementById('statusFilter').value,
+        category: document.getElementById('categoryFilter').value,
+        search:   document.getElementById('searchInput').value.trim()
+    };
+
+    try {
+        const cases = await fetchAllCases(filters);
+        document.getElementById('resultsCount').textContent =
+            cases.length === 0 ? '' : `Showing ${cases.length} case${cases.length !== 1 ? 's' : ''}`;
+        renderCasesTable(cases);
+    } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:32px; color:var(--red);">
+            Failed to load cases: ${err.message}</td></tr>`;
+    }
+}
+
+function renderCasesTable(cases) {
+    const tbody = document.getElementById('casesTableBody');
+
+    if (cases.length === 0) {
+        tbody.innerHTML = `
+            <tr><td colspan="7">
+                <div class="empty-state">
+                    <div class="empty-state__icon">🦷</div>
+                    <div class="empty-state__title">No cases found</div>
+                    <div class="empty-state__desc">Try adjusting your filters or add a new case.</div>
+                    <a href="case-form.html" class="btn btn--primary">➕ Add New Case</a>
+                </div>
+            </td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = cases.map(c => {
+        const thumb = c.featured_image
+            ? `<img src="${escHtml(c.featured_image)}" alt="" style="width:40px; height:40px; border-radius:6px; object-fit:cover;">`
+            : `<div style="width:40px; height:40px; background:#e2e8f0; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:18px;">🦷</div>`;
+        return `
+        <tr>
+            <td>${thumb}</td>
+            <td style="max-width:220px;">
+                <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escHtml(c.title)}</div>
+                ${c.treatment_type ? `<div style="font-size:12px; color:var(--text-l);">${escHtml(c.treatment_type)}</div>` : ''}
+            </td>
+            <td style="font-size:13px;">${escHtml(c.category || '—')}</td>
+            <td>
+                <button class="badge badge--${c.status}" onclick="quickToggleStatus('${c.id}','${c.status}')"
+                        title="Click to toggle status" style="cursor:pointer; border:none; background:inherit;">
+                    ${c.status === 'published' ? '✅ Published' : '📝 Draft'}
+                </button>
+            </td>
+            <td>
+                <button onclick="quickToggleFeatured('${c.id}', ${c.is_featured})"
+                        title="Click to toggle featured" style="border:none; background:none; cursor:pointer; font-size:18px;"
+                        aria-label="${c.is_featured ? 'Remove featured' : 'Mark as featured'}">
+                    ${c.is_featured ? '⭐' : '☆'}
+                </button>
+            </td>
+            <td style="font-size:12px; color:var(--text-l); white-space:nowrap;">${formatDate(c.created_at)}</td>
+            <td>
+                <div style="display:flex; gap:6px; justify-content:flex-end;">
+                    <a href="case-form.html?id=${c.id}" class="btn btn--outline btn--sm">✏️ Edit</a>
+                    <button class="btn btn--danger btn--sm" onclick="openDeleteModal('${c.id}', '${escHtml(c.title).replace(/'/g, "\\'")}')">
+                        🗑️ Delete
+                    </button>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+/* ---- Quick toggles ---- */
+async function quickToggleStatus(id, current) {
+    try {
+        await toggleCaseStatus(id, current);
+        showToast(`Status changed to ${current === 'published' ? 'Draft' : 'Published'}`, 'success');
+        await loadCases();
+    } catch (err) {
+        showToast('Failed to update status: ' + err.message, 'error');
+    }
+}
+
+async function quickToggleFeatured(id, current) {
+    try {
+        await toggleFeatured(id, current);
+        showToast(current ? 'Removed from featured' : 'Marked as featured ⭐', 'success');
+        await loadCases();
+    } catch (err) {
+        showToast('Failed to update featured: ' + err.message, 'error');
+    }
+}
+
+/* ---- Delete modal ---- */
+function openDeleteModal(id, name) {
+    pendingDeleteId   = id;
+    pendingDeleteName = name;
+    document.getElementById('deleteModalCaseName').textContent = name;
+    document.getElementById('deleteModal').classList.add('is-visible');
+}
+
+function closeDeleteModal() {
+    pendingDeleteId = null;
+    document.getElementById('deleteModal').classList.remove('is-visible');
+}
+
+async function confirmDelete() {
+    if (!pendingDeleteId) return;
+
+    const btn = document.getElementById('confirmDeleteBtn');
+    btn.disabled  = true;
+    btn.innerHTML = '<span class="spinner"></span> Deleting…';
+
+    try {
+        await deleteCase(pendingDeleteId);
+        closeDeleteModal();
+        showToast('Case deleted successfully.', 'success');
+        await loadCases();
+    } catch (err) {
+        showToast('Failed to delete: ' + err.message, 'error');
+        btn.disabled  = false;
+        btn.innerHTML = 'Delete Case';
+    }
+}
+
+/* ---- Debounced search ---- */
+function debounceLoad() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(loadCases, 350);
+}
+
+/* ---- Helpers ---- */
+function formatDate(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function escHtml(str) {
+    const d = document.createElement('div');
+    d.appendChild(document.createTextNode(str || ''));
+    return d.innerHTML;
+}
+
+function showToast(message, type = 'info') {
+    let container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+    toast.className = `toast toast--${type}`;
+    toast.innerHTML = `<span>${icons[type]}</span><span>${message}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.classList.add('is-hiding');
+        setTimeout(() => toast.remove(), 350);
+    }, 3500);
+}
+
+/* ---- Mobile sidebar ---- */
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('is-open');
+    document.getElementById('sidebarOverlay').classList.toggle('is-active');
+}
+function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('is-open');
+    document.getElementById('sidebarOverlay').classList.remove('is-active');
+}
+
+/* Close modal on backdrop click */
+document.getElementById('deleteModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeDeleteModal();
+});
+</script>
+</body>
+</html>

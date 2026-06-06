@@ -84,6 +84,7 @@
                 <a href="#about" class="header__link">About</a>
                 <a href="#services" class="header__link">Services</a>
                 <a href="#gallery" class="header__link">Gallery</a>
+                <a href="cases.html" class="header__link">Cases</a>
                 <a href="#results" class="header__link">Results</a>
                 <a href="#testimonials" class="header__link">Reviews</a>
                 <a href="#location" class="header__link">Location</a>
@@ -312,6 +313,23 @@
                     <p class="doctor-msg__sig">— <strong>Dr. Kaiser</strong>, BDS · Vilgam, Kashmir</p>
                     <a href="#appointment" class="btn btn--primary">📅 Book a Visit</a>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED CASES – dynamically loaded from Supabase -->
+    <section class="featured-cases" id="featured-cases" style="display:none;">
+        <div class="container">
+            <div class="section-header" data-animate="fade-up">
+                <span class="section-tag">Patient Cases</span>
+                <h2 class="section-title">Featured Dental Cases</h2>
+                <p class="section-desc">Real results from our patients — published directly from the clinic.</p>
+            </div>
+            <div class="fc-grid" id="fcGrid">
+                <!-- Cards injected by JS -->
+            </div>
+            <div style="text-align:center; margin-top:36px;" data-animate="fade-up">
+                <a href="cases.html" class="btn btn--outline btn--lg">View All Cases →</a>
             </div>
         </div>
     </section>
@@ -678,6 +696,65 @@
     </button>
 
     <script src="script.js?v=5"></script>
+
+    <!-- Supabase – Featured Cases on Homepage -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+    /* ================================================================
+       Homepage Featured Cases
+       ⚠️  Replace YOUR_SUPABASE_URL and YOUR_SUPABASE_ANON_KEY below.
+    ================================================================ */
+    (async function () {
+        const SUPABASE_URL      = 'https://ynkqdkesohhhznjyazsp.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_eahhskoyTnpImscofH8XmQ_oDIosXiR';
+
+        try {
+            const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            const { data, error } = await db
+                .from('cases')
+                .select('id, title, category, treatment_type, featured_image, patient_age, created_at')
+                .eq('status', 'published')
+                .eq('is_featured', true)
+                .order('created_at', { ascending: false })
+                .limit(3);
+
+            if (error || !data || data.length === 0) return;
+
+            // Show the section
+            const section = document.getElementById('featured-cases');
+            section.style.display = '';
+
+            const grid = document.getElementById('fcGrid');
+            grid.innerHTML = data.map(c => `
+                <a href="cases.html" class="fc-card">
+                    <div class="fc-card__image">
+                        ${c.featured_image
+                            ? `<img src="${c.featured_image}" alt="${c.title}" loading="lazy">`
+                            : `<div class="fc-card__placeholder">🦷</div>`}
+                    </div>
+                    <div class="fc-card__body">
+                        ${c.category ? `<span class="fc-card__tag">${c.category}</span>` : ''}
+                        <h3 class="fc-card__title">${c.title}</h3>
+                        ${c.treatment_type ? `<p class="fc-card__treatment">🩺 ${c.treatment_type}</p>` : ''}
+                        <div class="fc-card__meta">
+                            ${c.patient_age ? `<span>🧑 Age ${c.patient_age}</span>` : ''}
+                            <span>📅 ${new Date(c.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span>
+                        </div>
+                    </div>
+                </a>`).join('');
+
+            // Re-trigger scroll animations for the new section
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); observer.unobserve(e.target); } });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            section.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+
+        } catch (e) {
+            // Silently fail – the section stays hidden
+            console.warn('Featured cases: could not load from Supabase.', e.message);
+        }
+    })();
+    </script>
 </body>
 
 </html>

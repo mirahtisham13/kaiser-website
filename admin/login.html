@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login – Dr. Kaiser's Dental Clinic</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+    <div class="login-page">
+        <div class="login-card">
+
+            <!-- Logo -->
+            <div class="login-logo">
+                <div class="login-logo__icon">🦷</div>
+                <span class="login-logo__title">Dr. Kaiser's Dental</span>
+                <span class="login-logo__sub">Admin Dashboard Login</span>
+            </div>
+
+            <!-- Error message -->
+            <div class="login-error" id="loginError">
+                <span>⚠️</span>
+                <span id="loginErrorText">Invalid credentials. Please try again.</span>
+            </div>
+
+            <!-- Login form -->
+            <form class="login-form" id="loginForm" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="email"
+                        placeholder="admin@example.com"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        name="password"
+                        placeholder="••••••••"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn btn--primary btn--lg btn--block" id="loginBtn">
+                    Sign In to Dashboard
+                </button>
+            </form>
+
+            <p style="text-align:center; margin-top:16px; font-size:12px; color:var(--text-l);">
+                <a href="../index.html">← Back to main website</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script>
+        // If already logged in, skip straight to dashboard
+        (async function () {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session) window.location.replace('dashboard.html');
+        })();
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const btn       = document.getElementById('loginBtn');
+            const errorEl   = document.getElementById('loginError');
+            const errorText = document.getElementById('loginErrorText');
+            const email     = document.getElementById('email').value.trim();
+            const password  = document.getElementById('password').value;
+
+            if (!email || !password) return;
+
+            btn.disabled   = true;
+            btn.innerHTML  = '<span class="spinner"></span>&ensp;Signing in…';
+            errorEl.style.display = 'none';
+
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+            if (error) {
+                errorText.textContent   = error.message;
+                errorEl.style.display   = 'flex';
+                btn.disabled            = false;
+                btn.innerHTML           = 'Sign In to Dashboard';
+            } else {
+                window.location.replace('dashboard.html');
+            }
+        });
+    </script>
+
+</body>
+</html>
