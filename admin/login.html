@@ -73,7 +73,7 @@
         // If already logged in, skip straight to dashboard
         (async function () {
             const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session) window.location.replace('dashboard.html');
+            if (session) window.location.replace('hub.html');
         })();
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -99,7 +99,7 @@
                 btn.disabled            = false;
                 btn.innerHTML           = 'Sign In to Dashboard';
             } else {
-                window.location.replace('dashboard.html');
+                window.location.replace('hub.html');
             }
         });
     </script>

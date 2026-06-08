@@ -242,7 +242,7 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
-        <a href="dashboard.html" class="sidebar__logo">
+        <a href="hub.html" class="sidebar__logo">
             <div class="sidebar__logo-icon">🦷</div>
             <div>
                 <span class="sidebar__logo-name">Dr. Kaiser's Dental</span>
@@ -251,11 +251,10 @@
         </a>
         <nav class="sidebar__nav">
             <span class="sidebar__section-label">Main</span>
-            <a href="dashboard.html"    class="sidebar__link"><span class="sidebar__link-icon">📊</span> Dashboard</a>
             <a href="hub.html"          class="sidebar__link is-active"><span class="sidebar__link-icon">🎛️</span> Content Hub</a>
             <a href="cases.html"        class="sidebar__link"><span class="sidebar__link-icon">🦷</span> All Cases</a>
             <a href="case-form.html"    class="sidebar__link"><span class="sidebar__link-icon">➕</span> Add New Case</a>
-            <a href="testimonials.html" class="sidebar__link"><span class="sidebar__link-icon">⭐</span> Testimonials</a>
+            <a href="reviews.html"      class="sidebar__link"><span class="sidebar__link-icon">⭐</span> Reviews</a>
             <div class="sidebar__divider"></div>
             <span class="sidebar__section-label">Site</span>
             <a href="../index.html"  class="sidebar__link" target="_blank" rel="noopener"><span class="sidebar__link-icon">🏠</span> View Homepage</a>
@@ -277,10 +276,9 @@
         <header class="topbar">
             <div class="topbar__left">
                 <button class="topbar__menu-toggle" onclick="toggleSidebar()">☰</button>
-                <h1 class="topbar__title">Content Hub</h1>
+                <h1 class="topbar__title">Site Photos</h1>
             </div>
             <div class="topbar__right">
-                <a href="case-form.html" class="btn btn--primary btn--sm">➕ Add Case</a>
                 <button class="admin-dark-toggle" onclick="toggleAdminTheme()" aria-label="Toggle dark mode">
                     <span class="adt-sun">☀️</span><span class="adt-moon">🌙</span>
                 </button>
@@ -288,148 +286,55 @@
         </header>
 
         <main class="main-content">
-
-            <!-- Quick Stats -->
-            <div class="hub-stats" id="hubStats">
-                <div class="hub-stat"><span class="hub-stat__val" id="statCases">—</span><span class="hub-stat__lbl">📋 Total Cases</span></div>
-                <div class="hub-stat"><span class="hub-stat__val" id="statPublished">—</span><span class="hub-stat__lbl">✅ Published</span></div>
-                <div class="hub-stat"><span class="hub-stat__val" id="statFeatured">—</span><span class="hub-stat__lbl">⭐ Featured</span></div>
-                <div class="hub-stat"><span class="hub-stat__val" id="statTestimonials">—</span><span class="hub-stat__lbl">💬 Reviews</span></div>
-                <div class="hub-stat"><span class="hub-stat__val" id="statMedia">—</span><span class="hub-stat__lbl">🖼️ Media Files</span></div>
-            </div>
-
-            <!-- Tab Navigation -->
-            <div class="hub-tabs" role="tablist">
-                <button class="hub-tab is-active" onclick="switchTab('cases')"   role="tab" id="tab-cases">
-                    <span class="hub-tab-icon">🦷</span> Cases
-                </button>
-                <button class="hub-tab" onclick="switchTab('testimonials')" role="tab" id="tab-testimonials">
-                    <span class="hub-tab-icon">⭐</span> Testimonials
-                </button>
-                <button class="hub-tab" onclick="switchTab('media')" role="tab" id="tab-media">
-                    <span class="hub-tab-icon">🖼️</span> Media Library
-                </button>
-            </div>
-
-            <!-- ====================================================
-                 CASES TAB
-            ==================================================== -->
-            <div class="tab-panel is-active" id="panel-cases">
-                <div class="cases-toolbar">
-                    <div class="search-wrap">
-                        <input type="text" class="form-control" id="caseSearch" placeholder="Search cases…" oninput="filterCases()">
-                    </div>
-                    <select class="form-control" id="caseStatusFilter" onchange="filterCases()" style="max-width:130px;">
-                        <option value="">All Status</option>
-                        <option value="published">Published</option>
-                        <option value="draft">Draft</option>
-                    </select>
-                    <select class="form-control" id="caseCatFilter" onchange="filterCases()" style="max-width:170px;">
-                        <option value="">All Categories</option>
-                        <option>Smile Makeovers</option>
-                        <option>Dental Implants</option>
-                        <option>Braces &amp; Orthodontics</option>
-                        <option>Crown &amp; Bridge</option>
-                        <option>Tooth Extraction</option>
-                        <option>General Dentistry</option>
-                        <option>Prosthetic Rehabilitation</option>
-                    </select>
-                    <a href="case-form.html" class="btn btn--primary btn--sm" style="margin-left:auto;">➕ Add Case</a>
-                </div>
-                <div class="card">
-                    <div class="table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Case</th>
-                                    <th>Category</th>
-                                    <th>Status</th>
-                                    <th>Featured</th>
-                                    <th>Date</th>
-                                    <th style="text-align:right;">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="casesBody">
-                                <tr><td colspan="6" class="loading-state"><span class="spinner spinner--dark"></span> Loading…</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="page-header">
+                <div class="page-header__text">
+                    <h1>Website Photos</h1>
+                    <p>Manage the main images displayed on your public website.</p>
                 </div>
             </div>
 
-            <!-- ====================================================
-                 TESTIMONIALS TAB
-            ==================================================== -->
-            <div class="tab-panel" id="panel-testimonials">
-
-                <!-- Quick Add Form (inline) - REMOVED per user request -->
-                <div style="margin-bottom:14px;">
-                    <p style="font-size:13px; color:var(--text-l);">Patient reviews submitted from the website will appear here as "Hidden" drafts. Approve them to show them on the homepage.</p>
-                </div>
-
-                <!-- Testimonials Table -->
-                <div class="card">
-                    <div class="table-wrap">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Patient</th>
-                                    <th>Rating</th>
-                                    <th>Review</th>
-                                    <th>Source</th>
-                                    <th>Shown</th>
-                                    <th style="text-align:right;">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="testimonialsBody">
-                                <tr><td colspan="6" class="loading-state"><span class="spinner spinner--dark"></span> Loading…</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="card" style="margin-bottom:24px; padding:20px;">
+                <h3 style="font-size:16px; font-weight:700; margin:0 0 8px;">Main Doctor Photo</h3>
+                <p style="font-size:13px; color:var(--text-l); margin-bottom:16px;">This photo is shown in the top header and "From the Doctor" section on the homepage.</p>
+                <div style="display:flex; align-items:center; gap:16px;">
+                    <input type="file" id="doctorPhotoInput" accept="image/*" style="display:none;" onchange="uploadSitePhoto('doctor.png', this.files[0], 'doctorPhotoBtn')">
+                    <button class="btn btn--primary" onclick="document.getElementById('doctorPhotoInput').click()" id="doctorPhotoBtn">
+                        📸 Change Doctor Photo
+                    </button>
                 </div>
             </div>
 
-            <!-- ====================================================
-                 MEDIA LIBRARY & SITE SETTINGS TAB
-            ==================================================== -->
-            <div class="tab-panel" id="panel-media">
-
-                <div class="card" style="margin-bottom:24px; padding:20px;">
-                    <h3 style="font-size:15px; font-weight:700; margin:0 0 12px;">Homepage Profile Photo</h3>
-                    <p style="font-size:13px; color:var(--text-l); margin-bottom:16px;">Upload a new photo to replace your picture on the public website homepage.</p>
-                    <div style="display:flex; align-items:center; gap:16px;">
-                        <input type="file" id="sitePhotoInput" accept="image/*" style="display:none;" onchange="uploadSitePhoto(this.files[0])">
-                        <button class="btn btn--primary" onclick="document.getElementById('sitePhotoInput').click()" id="sitePhotoBtn">
-                            📸 Change Homepage Photo
+            <div class="card" style="padding:20px;">
+                <h3 style="font-size:16px; font-weight:700; margin:0 0 8px;">Clinic Gallery Photos</h3>
+                <p style="font-size:13px; color:var(--text-l); margin-bottom:20px;">These are the 3 photos shown side-by-side in the gallery section of the homepage.</p>
+                
+                <div style="display:flex; flex-direction:column; gap:20px;">
+                    <!-- Gallery 1 -->
+                    <div style="border:1px solid var(--border); padding:16px; border-radius:8px;">
+                        <h4 style="margin:0 0 12px; font-size:14px;">Gallery Photo 1 (Left)</h4>
+                        <input type="file" id="gal1Input" accept="image/*" style="display:none;" onchange="uploadSitePhoto('gallery-1.png', this.files[0], 'gal1Btn')">
+                        <button class="btn btn--outline" onclick="document.getElementById('gal1Input').click()" id="gal1Btn">
+                            🖼️ Change Photo 1
                         </button>
                     </div>
-                </div>
-                <div class="media-upload-zone" id="mediaDropZone"
-                     onclick="document.getElementById('mediaFileInput').click()"
-                     ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
-                    <div class="media-upload-zone__icon">📁</div>
-                    <div class="media-upload-zone__title">Drag &amp; drop images here</div>
-                    <div class="media-upload-zone__hint">or click to browse — JPEG, PNG, WebP, GIF — max 10 MB each</div>
-                    <input type="file" id="mediaFileInput" accept="image/*" multiple onchange="uploadMediaFiles(this.files)">
-                </div>
 
-                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
-                    <span style="font-size:13px; color:var(--text-l);" id="mediaCount">Loading…</span>
-                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                        <input type="text" class="form-control" id="mediaSearch" placeholder="Search files…"
-                               oninput="filterMedia()" style="max-width:200px; font-size:13px; padding:7px 10px;">
+                    <!-- Gallery 2 -->
+                    <div style="border:1px solid var(--border); padding:16px; border-radius:8px;">
+                        <h4 style="margin:0 0 12px; font-size:14px;">Gallery Photo 2 (Center)</h4>
+                        <input type="file" id="gal2Input" accept="image/*" style="display:none;" onchange="uploadSitePhoto('gallery-2.png', this.files[0], 'gal2Btn')">
+                        <button class="btn btn--outline" onclick="document.getElementById('gal2Input').click()" id="gal2Btn">
+                            🖼️ Change Photo 2
+                        </button>
                     </div>
-                </div>
 
-                <div id="mediaUploadProgress" style="margin-bottom:12px; display:none;">
-                    <div style="font-size:13px; color:var(--text-l); margin-bottom:6px;" id="mediaProgressLabel">Uploading…</div>
-                    <div style="height:4px; background:var(--border); border-radius:2px; overflow:hidden;">
-                        <div id="mediaProgressBar" style="height:100%; background:var(--ap); width:0%; transition:width .3s;"></div>
+                    <!-- Gallery 3 -->
+                    <div style="border:1px solid var(--border); padding:16px; border-radius:8px;">
+                        <h4 style="margin:0 0 12px; font-size:14px;">Gallery Photo 3 (Right)</h4>
+                        <input type="file" id="gal3Input" accept="image/*" style="display:none;" onchange="uploadSitePhoto('gallery-3.png', this.files[0], 'gal3Btn')">
+                        <button class="btn btn--outline" onclick="document.getElementById('gal3Input').click()" id="gal3Btn">
+                            🖼️ Change Photo 3
+                        </button>
                     </div>
-                </div>
-
-                <div class="media-grid" id="mediaGrid">
-                    <div class="loading-state" style="grid-column:1/-1;"><span class="spinner spinner--dark"></span> Loading media…</div>
                 </div>
             </div>
 
@@ -440,450 +345,37 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script src="js/auth.js"></script>
-<script src="js/cases.js"></script>
-<script src="js/testimonials.js"></script>
-<script src="js/storage.js"></script>
 <script>
-/* ================================================================
-   Content Hub – All-in-one admin page
-================================================================ */
+const MEDIA_BUCKET = 'cases-images';
 
-const MEDIA_BUCKET  = 'cases-images';
-const MEDIA_PREFIX  = 'gallery/';
-
-let allCases        = [];
-let filteredCases   = [];
-let allTestimonials = [];
-let allMedia        = [];
-let filteredMedia   = [];
-let pendingDelete   = null;   // { type, id, name }
-let qaRating        = 5;
-
-/* ── Init ─────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', async () => {
     const session = await checkAuth();
     if (!session) return;
     await updateUserDisplay();
-
-    await Promise.all([loadCases(), loadTestimonials(), loadMedia()]);
-    initStarPicker();
-    initActiveTab();
 });
 
-/* ── Tab switching ────────────────────────────────────── */
-function switchTab(name) {
-    document.querySelectorAll('.hub-tab').forEach(t => t.classList.remove('is-active'));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('is-active'));
-    document.getElementById('tab-' + name).classList.add('is-active');
-    document.getElementById('panel-' + name).classList.add('is-active');
-    location.hash = name;
-}
-
-function initActiveTab() {
-    const hash = location.hash.replace('#', '');
-    if (['cases','testimonials','media'].includes(hash)) switchTab(hash);
-}
-
-/* ═══════════════════════════════════════════════════════
-   CASES
-═══════════════════════════════════════════════════════ */
-async function loadCases() {
-    try {
-        const { data, error } = await supabaseClient
-            .from('cases').select('*').order('created_at', { ascending: false });
-        if (error) throw error;
-        allCases = data || [];
-        filteredCases = allCases;
-        renderCases();
-        updateStats();
-    } catch (e) {
-        document.getElementById('casesBody').innerHTML =
-            `<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--red);">Failed: ${e.message}</td></tr>`;
-    }
-}
-
-function filterCases() {
-    const q   = document.getElementById('caseSearch').value.toLowerCase();
-    const st  = document.getElementById('caseStatusFilter').value;
-    const cat = document.getElementById('caseCatFilter').value;
-    filteredCases = allCases.filter(c =>
-        (!q   || c.title.toLowerCase().includes(q) || (c.category||'').toLowerCase().includes(q) || (c.treatment_type||'').toLowerCase().includes(q)) &&
-        (!st  || c.status === st) &&
-        (!cat || c.category === cat)
-    );
-    renderCases();
-}
-
-function renderCases() {
-    const tbody = document.getElementById('casesBody');
-    if (filteredCases.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">
-            <div class="empty-state__icon">🦷</div>
-            <div class="empty-state__title">No cases found</div>
-            <div class="empty-state__desc">Try adjusting filters or add a new case.</div>
-            <a href="case-form.html" class="btn btn--primary">➕ Add Case</a>
-        </div></td></tr>`;
-        return;
-    }
-    tbody.innerHTML = filteredCases.map(c => `
-        <tr>
-            <td>
-                <div style="display:flex; align-items:center; gap:10px;">
-                    ${c.featured_image
-                        ? `<img src="${esc(c.featured_image)}" alt="" style="width:42px;height:42px;border-radius:8px;object-fit:cover;border:1px solid var(--border);flex-shrink:0;">`
-                        : `<div style="width:42px;height:42px;border-radius:8px;background:var(--ap-100);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🦷</div>`}
-                    <div>
-                        <div style="font-weight:600; font-size:13px;">${esc(c.title)}</div>
-                        ${c.treatment_type ? `<div style="font-size:11px;color:var(--text-l);">🩺 ${esc(c.treatment_type)}</div>` : ''}
-                    </div>
-                </div>
-            </td>
-            <td>${c.category ? `<span class="badge badge--featured" style="font-size:11px;">${esc(c.category)}</span>` : '<span style="color:var(--text-m);font-size:12px;">—</span>'}</td>
-            <td>
-                <span class="badge badge--${c.status === 'published' ? 'published' : 'draft'}" style="cursor:default;">
-                    ${c.status === 'published' ? '✅ Published' : '📝 Draft'}
-                </span>
-            </td>
-            <td style="text-align:center; font-size:16px;">${c.is_featured ? '⭐' : '—'}</td>
-            <td style="font-size:12px;color:var(--text-l);white-space:nowrap;">${formatDate(c.created_at)}</td>
-            <td>
-                <div style="display:flex;gap:5px;justify-content:flex-end;flex-wrap:wrap;">
-                    <a href="case-form.html?id=${c.id}" class="btn btn--outline btn--sm">✏️ Edit</a>
-                    <a href="../case.html?id=${c.id}" target="_blank" class="btn btn--ghost btn--sm" title="View live">🔗</a>
-                    <button class="btn btn--ghost btn--sm" title="Copy link" onclick="copyLink('${c.id}')">📋</button>
-                    <button class="btn btn--danger btn--sm" onclick="openDelete('case','${c.id}','${esc(c.title).replace(/'/g,"\\'")}')">🗑️</button>
-                </div>
-            </td>
-        </tr>`).join('');
-}
-
-/* ═══════════════════════════════════════════════════════
-   TESTIMONIALS
-═══════════════════════════════════════════════════════ */
-async function loadTestimonials() {
-    try {
-        const items = await fetchAllTestimonials();
-        allTestimonials = items;
-        renderTestimonials();
-        updateStats();
-    } catch (e) {
-        document.getElementById('testimonialsBody').innerHTML =
-            `<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--red);">Failed: ${e.message}</td></tr>`;
-    }
-}
-
-function renderTestimonials() {
-    const tbody = document.getElementById('testimonialsBody');
-    if (allTestimonials.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">
-            <div class="empty-state__icon">⭐</div>
-            <div class="empty-state__title">No testimonials yet</div>
-            <div class="empty-state__desc">Add your first patient review above.</div>
-        </div></td></tr>`;
-        return;
-    }
-    const stars = r => '★'.repeat(r||5) + '☆'.repeat(5-(r||5));
-    tbody.innerHTML = allTestimonials.map(t => `
-        <tr>
-            <td>
-                <div style="display:flex;align-items:center;gap:9px;">
-                    <div style="width:32px;height:32px;background:var(--ap-100);color:var(--ap);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;">
-                        ${esc(t.avatar_letter || t.name.charAt(0).toUpperCase())}
-                    </div>
-                    <span style="font-weight:600;font-size:13px;">${esc(t.name)}</span>
-                </div>
-            </td>
-            <td style="font-size:13px;white-space:nowrap;color:#f59e0b;">${stars(t.rating)}</td>
-            <td style="max-width:240px;">
-                <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;color:var(--text-l);">${esc(t.text)}</div>
-            </td>
-            <td><span class="badge ${t.source === 'google' ? 'badge--featured' : 'badge--published'}" style="font-size:11px;">${t.source === 'google' ? '🔍 Google' : '✍️ Direct'}</span></td>
-            <td>
-                <button onclick="toggleReview('${t.id}',${t.is_published})"
-                    class="badge badge--${t.is_published ? 'published' : 'draft'}"
-                    style="border:none;background:inherit;cursor:pointer;font-size:11px;">
-                    ${t.is_published ? '✅ Shown' : '📝 Hidden'}
-                </button>
-            </td>
-            <td>
-                <div style="display:flex;gap:5px;justify-content:flex-end;">
-                    <button class="btn btn--danger btn--sm" onclick="openDelete('testimonial','${t.id}','${esc(t.name).replace(/'/g,"\\'")}')">🗑️ Delete</button>
-                </div>
-            </td>
-        </tr>`).join('');
-}
-
-function initStarPicker() {
-    const btns = document.querySelectorAll('#qaStarPicker .star-btn');
-    function highlight(val) {
-        btns.forEach(b => b.classList.toggle('is-active', parseInt(b.dataset.val) <= val));
-    }
-    btns.forEach(btn => {
-        btn.addEventListener('mouseenter', () => highlight(parseInt(btn.dataset.val)));
-        btn.addEventListener('mouseleave', () => highlight(qaRating));
-        btn.addEventListener('click', () => {
-            qaRating = parseInt(btn.dataset.val);
-            document.getElementById('qaRating').value = qaRating;
-            highlight(qaRating);
-        });
-    });
-    highlight(5);
-}
-
-function toggleQuickAdd() {
-    const form = document.getElementById('quickAddForm');
-    form.classList.toggle('is-open');
-    const btn = document.getElementById('qaToggleBtn');
-    btn.textContent = form.classList.contains('is-open') ? '× Close' : '➕ Add Review';
-}
-
-async function submitQuickReview() {
-    const name = document.getElementById('qaName').value.trim();
-    const text = document.getElementById('qaText').value.trim();
-    if (!name) { showToast('Please enter a name.', 'error'); return; }
-    if (!text) { showToast('Please enter a review.', 'error'); return; }
-
-    const btn = document.getElementById('qaSubmitBtn');
-    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Saving…';
-
-    try {
-        await createTestimonial({
-            name, text,
-            rating:       parseInt(document.getElementById('qaRating').value) || 5,
-            source:       document.getElementById('qaSource').value,
-            avatar_letter: name.charAt(0).toUpperCase(),
-            is_published: document.getElementById('qaPublished').checked
-        });
-        showToast('Review saved! ✅', 'success');
-        document.getElementById('qaName').value = '';
-        document.getElementById('qaText').value = '';
-        toggleQuickAdd();
-        await loadTestimonials();
-    } catch (e) {
-        showToast('Error: ' + e.message, 'error');
-    } finally {
-        btn.disabled = false; btn.innerHTML = '✅ Save Review';
-    }
-}
-
-async function toggleReview(id, current) {
-    try {
-        await toggleTestimonialPublished(id, current);
-        showToast(current ? 'Review hidden.' : 'Review shown on homepage! ✅', 'success');
-        await loadTestimonials();
-    } catch (e) { showToast('Error: ' + e.message, 'error'); }
-}
-
-/* ═══════════════════════════════════════════════════════
-   MEDIA LIBRARY
-═══════════════════════════════════════════════════════ */
-async function loadMedia() {
-    try {
-        const { data, error } = await supabaseClient.storage
-            .from(MEDIA_BUCKET)
-            .list(MEDIA_PREFIX.slice(0, -1), { limit: 200, sortBy: { column: 'created_at', order: 'desc' } });
-
-        if (error) throw error;
-        allMedia = (data || []).filter(f => f.name && !f.name.startsWith('.'));
-        filteredMedia = allMedia;
-        renderMedia();
-        updateStats();
-    } catch (e) {
-        document.getElementById('mediaGrid').innerHTML =
-            `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--red);">Failed to load media: ${e.message}</div>`;
-    }
-}
-
-function filterMedia() {
-    const q = document.getElementById('mediaSearch').value.toLowerCase();
-    filteredMedia = q ? allMedia.filter(f => f.name.toLowerCase().includes(q)) : allMedia;
-    renderMedia();
-}
-
-function getMediaPublicUrl(filename) {
-    const { data } = supabaseClient.storage
-        .from(MEDIA_BUCKET)
-        .getPublicUrl(`${MEDIA_PREFIX}${filename}`);
-    return data.publicUrl;
-}
-
-function renderMedia() {
-    const count = filteredMedia.length;
-    document.getElementById('mediaCount').textContent = `${count} file${count !== 1 ? 's' : ''}`;
-
-    if (count === 0) {
-        document.getElementById('mediaGrid').innerHTML =
-            `<div style="grid-column:1/-1;" class="empty-state">
-                <div class="empty-state__icon">🖼️</div>
-                <div class="empty-state__title">No media yet</div>
-                <div class="empty-state__desc">Upload images above to build your media library.</div>
-             </div>`;
-        return;
-    }
-
-    document.getElementById('mediaGrid').innerHTML = filteredMedia.map(f => {
-        const url = getMediaPublicUrl(f.name);
-        return `
-            <div class="media-item" id="mi-${CSS.escape(f.name)}">
-                <img src="${esc(url)}" alt="${esc(f.name)}" loading="lazy">
-                <div class="media-item__filename">${esc(f.name)}</div>
-                <div class="media-item__overlay">
-                    <button class="media-item__btn media-item__btn--copy" onclick="copyMediaUrl('${esc(url).replace(/'/g,"\\'")}',this)">📋 Copy URL</button>
-                    <button class="media-item__btn media-item__btn--delete" onclick="openDelete('media','${esc(f.name).replace(/'/g,"\\'")}','${esc(f.name).replace(/'/g,"\\'")}')">🗑️ Delete</button>
-                </div>
-            </div>`;
-    }).join('');
-}
-
-async function uploadMediaFiles(files) {
-    if (!files || files.length === 0) return;
-    const progress  = document.getElementById('mediaUploadProgress');
-    const bar       = document.getElementById('mediaProgressBar');
-    const label     = document.getElementById('mediaProgressLabel');
-    progress.style.display = '';
-
-    let done = 0;
-    for (const file of Array.from(files)) {
-        label.textContent = `Uploading ${file.name}… (${done + 1}/${files.length})`;
-        try {
-            const ext  = file.name.split('.').pop().toLowerCase();
-            const name = `${Date.now()}-${Math.random().toString(36).substr(2,8)}.${ext}`;
-            const { error } = await supabaseClient.storage
-                .from(MEDIA_BUCKET)
-                .upload(`${MEDIA_PREFIX}${name}`, file, { cacheControl: '3600', upsert: false, contentType: file.type });
-            if (error) throw error;
-        } catch (e) {
-            showToast(`Failed: ${file.name} — ${e.message}`, 'error');
-        }
-        done++;
-        bar.style.width = `${Math.round((done / files.length) * 100)}%`;
-    }
-
-    label.textContent = 'Done!';
-    setTimeout(() => { progress.style.display = 'none'; bar.style.width = '0%'; }, 1200);
-    showToast(`${done} file${done !== 1 ? 's' : ''} uploaded ✅`, 'success');
-    await loadMedia();
-    updateStats();
-}
-
-async function uploadSitePhoto(file) {
+async function uploadSitePhoto(filename, file, btnId) {
     if (!file) return;
-    const btn = document.getElementById('sitePhotoBtn');
+    const btn = document.getElementById(btnId);
+    const originalText = btn.innerHTML;
+    
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span> Uploading…';
 
     try {
-        // Upload exactly as site-assets/doctor.png to overwrite previous photo
         const { error } = await supabaseClient.storage
             .from(MEDIA_BUCKET)
-            .upload('site-assets/doctor.png', file, { cacheControl: '0', upsert: true, contentType: file.type });
+            .upload('site-assets/' + filename, file, { cacheControl: '0', upsert: true, contentType: file.type });
+        
         if (error) throw error;
         
-        showToast('Homepage photo updated successfully! ✅', 'success');
+        showToast('Photo updated successfully! ✅', 'success');
     } catch (e) {
         showToast('Error uploading photo: ' + e.message, 'error');
     } finally {
         btn.disabled = false;
-        btn.innerHTML = '📸 Change Homepage Photo';
-        document.getElementById('sitePhotoInput').value = '';
+        btn.innerHTML = originalText;
     }
-}
-
-function copyMediaUrl(url, btn) {
-    navigator.clipboard.writeText(url).then(() => {
-        btn.textContent = '✅ Copied!';
-        setTimeout(() => { btn.textContent = '📋 Copy URL'; }, 2000);
-    });
-}
-
-/* Drag & drop */
-function onDragOver(e)  { e.preventDefault(); document.getElementById('mediaDropZone').classList.add('is-dragging'); }
-function onDragLeave(e) { document.getElementById('mediaDropZone').classList.remove('is-dragging'); }
-function onDrop(e) {
-    e.preventDefault();
-    document.getElementById('mediaDropZone').classList.remove('is-dragging');
-    const files = e.dataTransfer?.files;
-    if (files?.length) uploadMediaFiles(files);
-}
-
-/* ═══════════════════════════════════════════════════════
-   DELETE (unified)
-═══════════════════════════════════════════════════════ */
-function openDelete(type, id, name) {
-    pendingDelete = { type, id, name };
-    document.getElementById('deleteModalType').textContent = type === 'case' ? 'Case' : type === 'testimonial' ? 'Review' : 'File';
-    document.getElementById('deleteModalIcon').textContent  = type === 'media' ? '🗑️' : '🗑️';
-    document.getElementById('deleteModalName').textContent  = name;
-    document.getElementById('deleteModal').classList.add('is-visible');
-}
-
-function closeDeleteModal() {
-    pendingDelete = null;
-    document.getElementById('deleteModal').classList.remove('is-visible');
-}
-
-async function confirmDelete() {
-    if (!pendingDelete) return;
-    const btn = document.getElementById('confirmDeleteBtn');
-    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
-
-    try {
-        const { type, id, name } = pendingDelete;
-
-        if (type === 'case') {
-            await deleteCase(id);
-            showToast('Case deleted.', 'success');
-            await loadCases();
-        } else if (type === 'testimonial') {
-            await deleteTestimonial(id);
-            showToast('Review deleted.', 'success');
-            await loadTestimonials();
-        } else if (type === 'media') {
-            const { error } = await supabaseClient.storage
-                .from(MEDIA_BUCKET)
-                .remove([`${MEDIA_PREFIX}${name}`]);
-            if (error) throw error;
-            showToast('File deleted.', 'success');
-            await loadMedia();
-        }
-
-        closeDeleteModal();
-    } catch (e) {
-        showToast('Error: ' + e.message, 'error');
-    } finally {
-        btn.disabled = false; btn.innerHTML = 'Delete';
-    }
-}
-
-document.getElementById('deleteModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeDeleteModal(); });
-
-/* ═══════════════════════════════════════════════════════
-   STATS
-═══════════════════════════════════════════════════════ */
-function updateStats() {
-    document.getElementById('statCases').textContent      = allCases.length;
-    document.getElementById('statPublished').textContent  = allCases.filter(c => c.status === 'published').length;
-    document.getElementById('statFeatured').textContent   = allCases.filter(c => c.is_featured).length;
-    document.getElementById('statTestimonials').textContent = allTestimonials.length;
-    document.getElementById('statMedia').textContent      = allMedia.length;
-}
-
-/* ═══════════════════════════════════════════════════════
-   HELPERS
-═══════════════════════════════════════════════════════ */
-function copyLink(id) {
-    const url = `${window.location.origin.replace('/admin', '')}/case.html?id=${id}`;
-    navigator.clipboard.writeText(url).then(() => showToast('Link copied! 📋', 'success'));
-}
-
-function formatDate(iso) {
-    return iso ? new Date(iso).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) : '—';
-}
-
-function esc(s) {
-    const d = document.createElement('div');
-    d.appendChild(document.createTextNode(s || ''));
-    return d.innerHTML;
 }
 
 function showToast(msg, type = 'info') {
