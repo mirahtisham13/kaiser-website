@@ -477,7 +477,8 @@ async function saveSiteSettings() {
     try {
         const { error } = await supabaseClient
             .from('site_settings')
-            .upsert(payload);
+            .update(payload)
+            .eq('id', 1);
             
         if (error) throw error;
         showToast('Settings saved successfully! ✅', 'success');
