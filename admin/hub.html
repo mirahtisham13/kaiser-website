@@ -362,58 +362,9 @@
             ==================================================== -->
             <div class="tab-panel" id="panel-testimonials">
 
-                <!-- Quick Add Form (inline) -->
+                <!-- Quick Add Form (inline) - REMOVED per user request -->
                 <div style="margin-bottom:14px;">
-                    <button class="btn btn--primary" onclick="toggleQuickAdd()" id="qaToggleBtn">➕ Add Review</button>
-                </div>
-
-                <div class="quick-add" id="quickAddForm">
-                    <div class="quick-add-header">
-                        <span class="quick-add-title">✍️ Add New Review</span>
-                        <button class="quick-add-close" onclick="toggleQuickAdd()">×</button>
-                    </div>
-                    <div class="quick-add-grid">
-                        <div class="form-group">
-                            <label class="form-label">Patient Name *</label>
-                            <input type="text" class="form-control" id="qaName" placeholder="e.g. Aisha Bhat">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Rating</label>
-                            <div class="star-picker" id="qaStarPicker">
-                                <button type="button" class="star-btn" data-val="1">★</button>
-                                <button type="button" class="star-btn" data-val="2">★</button>
-                                <button type="button" class="star-btn" data-val="3">★</button>
-                                <button type="button" class="star-btn" data-val="4">★</button>
-                                <button type="button" class="star-btn is-active" data-val="5">★</button>
-                            </div>
-                            <input type="hidden" id="qaRating" value="5">
-                        </div>
-                        <div class="form-group span-2">
-                            <label class="form-label">Review Text *</label>
-                            <textarea class="form-control" id="qaText" rows="3" placeholder="Patient's review…" maxlength="600"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Source</label>
-                            <select class="form-control" id="qaSource">
-                                <option value="google">🔍 Google</option>
-                                <option value="direct">✍️ Direct</option>
-                            </select>
-                        </div>
-                        <div class="form-group" style="justify-content:flex-end;">
-                            <div class="toggle-row" style="margin-top:auto; padding-bottom:2px;">
-                                <label class="toggle">
-                                    <input type="checkbox" id="qaPublished" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                                <label class="toggle-label" for="qaPublished">Show on homepage</label>
-                            </div>
-                        </div>
-                        <div class="form-group span-2">
-                            <button class="btn btn--primary btn--lg" onclick="submitQuickReview()" id="qaSubmitBtn">
-                                ✅ Save Review
-                            </button>
-                        </div>
-                    </div>
+                    <p style="font-size:13px; color:var(--text-l);">Patient reviews submitted from the website will appear here as "Hidden" drafts. Approve them to show them on the homepage.</p>
                 </div>
 
                 <!-- Testimonials Table -->
@@ -439,9 +390,20 @@
             </div>
 
             <!-- ====================================================
-                 MEDIA LIBRARY TAB
+                 MEDIA LIBRARY & SITE SETTINGS TAB
             ==================================================== -->
             <div class="tab-panel" id="panel-media">
+
+                <div class="card" style="margin-bottom:24px; padding:20px;">
+                    <h3 style="font-size:15px; font-weight:700; margin:0 0 12px;">Homepage Profile Photo</h3>
+                    <p style="font-size:13px; color:var(--text-l); margin-bottom:16px;">Upload a new photo to replace your picture on the public website homepage.</p>
+                    <div style="display:flex; align-items:center; gap:16px;">
+                        <input type="file" id="sitePhotoInput" accept="image/*" style="display:none;" onchange="uploadSitePhoto(this.files[0])">
+                        <button class="btn btn--primary" onclick="document.getElementById('sitePhotoInput').click()" id="sitePhotoBtn">
+                            📸 Change Homepage Photo
+                        </button>
+                    </div>
+                </div>
                 <div class="media-upload-zone" id="mediaDropZone"
                      onclick="document.getElementById('mediaFileInput').click()"
                      ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
@@ -645,8 +607,7 @@ function renderTestimonials() {
             </td>
             <td>
                 <div style="display:flex;gap:5px;justify-content:flex-end;">
-                    <a href="testimonial-form.html?id=${t.id}" class="btn btn--outline btn--sm">✏️ Edit</a>
-                    <button class="btn btn--danger btn--sm" onclick="openDelete('testimonial','${t.id}','${esc(t.name).replace(/'/g,"\\'")}')">🗑️</button>
+                    <button class="btn btn--danger btn--sm" onclick="openDelete('testimonial','${t.id}','${esc(t.name).replace(/'/g,"\\'")}')">🗑️ Delete</button>
                 </div>
             </td>
         </tr>`).join('');
@@ -803,6 +764,29 @@ async function uploadMediaFiles(files) {
     showToast(`${done} file${done !== 1 ? 's' : ''} uploaded ✅`, 'success');
     await loadMedia();
     updateStats();
+}
+
+async function uploadSitePhoto(file) {
+    if (!file) return;
+    const btn = document.getElementById('sitePhotoBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Uploading…';
+
+    try {
+        // Upload exactly as site-assets/doctor.png to overwrite previous photo
+        const { error } = await supabaseClient.storage
+            .from(MEDIA_BUCKET)
+            .upload('site-assets/doctor.png', file, { cacheControl: '0', upsert: true, contentType: file.type });
+        if (error) throw error;
+        
+        showToast('Homepage photo updated successfully! ✅', 'success');
+    } catch (e) {
+        showToast('Error uploading photo: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '📸 Change Homepage Photo';
+        document.getElementById('sitePhotoInput').value = '';
+    }
 }
 
 function copyMediaUrl(url, btn) {

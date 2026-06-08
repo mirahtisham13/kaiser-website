@@ -78,7 +78,6 @@
                 <h1 class="topbar__title">Testimonials</h1>
             </div>
             <div class="topbar__right">
-                <a href="testimonial-form.html" class="btn btn--primary btn--sm">➕ Add Review</a>
                 <button class="admin-dark-toggle" onclick="toggleAdminTheme()" aria-label="Toggle dark mode">
                     <span class="adt-sun">☀️</span><span class="adt-moon">🌙</span>
                 </button>
@@ -89,9 +88,8 @@
             <div class="page-header">
                 <div class="page-header__text">
                     <h1>Patient Reviews</h1>
-                    <p>Manage testimonials shown on the homepage.</p>
+                    <p>Approve or hide patient reviews submitted from the website.</p>
                 </div>
-                <a href="testimonial-form.html" class="btn btn--primary">➕ Add New Review</a>
             </div>
 
             <div class="card">
@@ -143,8 +141,7 @@ async function loadTestimonials() {
                 <div class="empty-state">
                     <div class="empty-state__icon">⭐</div>
                     <div class="empty-state__title">No testimonials yet</div>
-                    <div class="empty-state__desc">Add your first patient review.</div>
-                    <a href="testimonial-form.html" class="btn btn--primary">➕ Add Review</a>
+                    <div class="empty-state__desc">Reviews submitted from the website will appear here.</div>
                 </div></td></tr>`;
             return;
         }
@@ -174,8 +171,7 @@ async function loadTestimonials() {
                 <td style="font-size:12px; color:var(--text-l); white-space:nowrap;">${formatDate(t.created_at)}</td>
                 <td>
                     <div style="display:flex; gap:6px; justify-content:flex-end;">
-                        <a href="testimonial-form.html?id=${t.id}" class="btn btn--outline btn--sm">✏️ Edit</a>
-                        <button class="btn btn--danger btn--sm" onclick="openDelete('${t.id}','${esc(t.name).replace(/'/g,"\\'")}')" >🗑️</button>
+                        <button class="btn btn--danger btn--sm" onclick="openDelete('${t.id}','${esc(t.name).replace(/'/g,"\\'")}')" >🗑️ Delete</button>
                     </div>
                 </td>
             </tr>`).join('');
