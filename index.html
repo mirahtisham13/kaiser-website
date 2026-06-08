@@ -449,6 +449,27 @@
                 <a href="https://share.google/DSx6a88fpgX6kXeIO" target="_blank" rel="noopener noreferrer"
                     class="btn btn--primary btn--lg">⭐ Read All Reviews on Google</a>
             </div>
+
+            <!-- Public Review Submission Form -->
+            <div class="leave-review-box" data-animate="fade-up">
+                <h3>Leave a Review</h3>
+                <form id="publicReviewForm" class="public-review-form" onsubmit="submitPublicReview(event)">
+                    <div class="public-star-picker" id="publicStarPicker">
+                        <button type="button" class="public-star-btn" data-val="1">★</button>
+                        <button type="button" class="public-star-btn" data-val="2">★</button>
+                        <button type="button" class="public-star-btn" data-val="3">★</button>
+                        <button type="button" class="public-star-btn" data-val="4">★</button>
+                        <button type="button" class="public-star-btn is-active" data-val="5">★</button>
+                    </div>
+                    <input type="hidden" id="publicReviewRating" value="5">
+                    <input type="text" id="publicReviewName" placeholder="Your Name" required>
+                    <textarea id="publicReviewText" rows="3" placeholder="Tell us about your experience..." required></textarea>
+                    <div class="review-submit-wrap">
+                        <button type="submit" class="btn btn--primary" id="publicReviewSubmit">Submit Review</button>
+                        <div id="publicReviewMsg" class="review-msg"></div>
+                    </div>
+                </form>
+            </div>
         </div>
     </section>
 
@@ -744,6 +765,74 @@
             console.warn('Testimonials: could not load from Supabase.', e.message);
         }
     })();
+
+    /* Public Review Submission */
+    const publicStarPicker = document.getElementById('publicStarPicker');
+    if (publicStarPicker) {
+        const btns = publicStarPicker.querySelectorAll('.public-star-btn');
+        const ratingInput = document.getElementById('publicReviewRating');
+        let currentRating = 5;
+
+        function highlight(val) {
+            btns.forEach(b => b.classList.toggle('is-active', parseInt(b.dataset.val) <= val));
+        }
+
+        btns.forEach(btn => {
+            btn.addEventListener('mouseenter', () => highlight(parseInt(btn.dataset.val)));
+            btn.addEventListener('mouseleave', () => highlight(currentRating));
+            btn.addEventListener('click', () => {
+                currentRating = parseInt(btn.dataset.val);
+                ratingInput.value = currentRating;
+                highlight(currentRating);
+            });
+        });
+    }
+
+    async function submitPublicReview(e) {
+        e.preventDefault();
+        const btn = document.getElementById('publicReviewSubmit');
+        const msg = document.getElementById('publicReviewMsg');
+        msg.className = 'review-msg';
+        msg.textContent = '';
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+
+        try {
+            const SUPABASE_URL      = 'https://ynkqdkesohhhznjyazsp.supabase.co';
+            const SUPABASE_ANON_KEY = 'sb_publishable_eahhskoyTnpImscofH8XmQ_oDIosXiR';
+            const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+            const name = document.getElementById('publicReviewName').value.trim();
+            const text = document.getElementById('publicReviewText').value.trim();
+            const rating = parseInt(document.getElementById('publicReviewRating').value) || 5;
+
+            const { error } = await db.from('testimonials').insert([{
+                name,
+                text,
+                rating,
+                source: 'direct',
+                avatar_letter: name.charAt(0).toUpperCase(),
+                is_published: false // Draft state by default!
+            }]);
+
+            if (error) throw error;
+
+            msg.className = 'review-msg success';
+            msg.textContent = 'Thank you! Your review has been submitted for approval.';
+            document.getElementById('publicReviewForm').reset();
+            document.getElementById('publicReviewRating').value = 5;
+            const btns = document.querySelectorAll('.public-star-btn');
+            btns.forEach(b => b.classList.toggle('is-active', true));
+
+        } catch (err) {
+            msg.className = 'review-msg error';
+            msg.textContent = 'Failed to submit review. Please try again later.';
+            console.error(err);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Submit Review';
+        }
+    }
     </script>
 </body>
 

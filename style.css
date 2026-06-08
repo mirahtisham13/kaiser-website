@@ -2694,3 +2694,94 @@ a.case-card {
 [data-theme="dark"] .case-info-card         { background: var(--card-bg); border-color: var(--border); }
 [data-theme="dark"] .case-detail-description { color: var(--text); }
 [data-theme="dark"] .fc-card { background: var(--card-bg); border-color: var(--card-border); }
+
+/* ================================================================
+   PUBLIC REVIEW SUBMISSION FORM
+================================================================ */
+.leave-review-box {
+    max-width: 600px;
+    margin: 40px auto 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.leave-review-box h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    color: var(--text);
+    text-align: center;
+}
+
+.public-review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.public-review-form input,
+.public-review-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.public-review-form input:focus,
+.public-review-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-500);
+}
+
+.public-star-picker {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.public-star-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.1s;
+    padding: 0;
+}
+
+.public-star-btn:hover { transform: scale(1.1); }
+.public-star-btn.is-active { color: #f59e0b; }
+
+.review-submit-wrap {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.review-msg {
+    margin-top: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    display: none;
+}
+.review-msg.success { color: var(--primary-600); display: block; }
+.review-msg.error { color: var(--red); display: block; }
+
+[data-theme="dark"] .leave-review-box {
+    background: var(--card-bg);
+    border-color: var(--border);
+}
+[data-theme="dark"] .public-review-form input,
+[data-theme="dark"] .public-review-form textarea {
+    background: var(--bg);
+    border-color: var(--border);
+}
