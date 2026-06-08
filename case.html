@@ -329,13 +329,6 @@ function renderCase(c, session) {
             💬 Share on WhatsApp
         </a>`;
 
-    // Featured image
-    if (c.featured_image) {
-        document.getElementById('caseFeaturedImg').src = c.featured_image;
-        document.getElementById('caseFeaturedImg').alt = c.title;
-        document.getElementById('caseFeaturedImgSection').style.display = '';
-    }
-
     // Description
     if (c.description) {
         document.getElementById('caseDescription').innerHTML = c.description;
@@ -344,14 +337,82 @@ function renderCase(c, session) {
     // Additional images (excluding featured)
     const images = (Array.isArray(c.images) ? c.images : [])
         .filter(url => url !== c.featured_image);
-    if (images.length > 0) {
-        const gallerySection = document.getElementById('caseGallerySection');
-        gallerySection.style.display = '';
-        document.getElementById('caseGallery').innerHTML = images.map((url, i) =>
-            `<div class="case-detail-gallery__item">
-                <img src="${esc(url)}" alt="${esc(c.title)} – image ${i + 2}" loading="lazy">
-             </div>`
-        ).join('');
+
+    // If exactly 1 featured + 1 gallery image -> Show Before/After Slider instead!
+    if (c.featured_image && images.length === 1) {
+        document.getElementById('caseFeaturedImgSection').style.display = '';
+        document.getElementById('caseFeaturedImgSection').innerHTML = `
+        <div class="container">
+            <h2 class="case-detail-section-title" style="text-align:center; margin-bottom:24px;">📸 Before & After</h2>
+            <div class="img-slider" data-slider style="max-width:800px; margin:0 auto; box-shadow:var(--shadow-lg);">
+                <img src="${esc(c.featured_image)}" alt="After" class="img-slider__bg">
+                <div class="img-slider__overlay">
+                    <img src="${esc(images[0])}" alt="Before">
+                </div>
+                <div class="img-slider__handle">
+                    <div class="img-slider__line"></div>
+                    <div class="img-slider__circle">↔</div>
+                    <div class="img-slider__line"></div>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:16px; color:var(--text-m); font-size:14px; font-weight:500;">
+                <span style="display:inline-block; margin-right:16px;">← Drag to compare →</span>
+            </div>
+        </div>`;
+        document.getElementById('caseGallerySection').style.display = 'none';
+        
+        // Init Slider Drag Logic for this dynamic element
+        setTimeout(() => {
+            const slider = document.querySelector('[data-slider]');
+            if (!slider) return;
+            const overlay = slider.querySelector('.img-slider__overlay');
+            const handle = slider.querySelector('.img-slider__handle');
+            const overlayImg = overlay.querySelector('img');
+            let isDragging = false;
+            
+            function setPosition(x) {
+                const rect = slider.getBoundingClientRect();
+                let pct = ((x - rect.left) / rect.width) * 100;
+                pct = Math.max(2, Math.min(98, pct));
+                overlay.style.width = pct + '%';
+                handle.style.left = pct + '%';
+                overlayImg.style.width = rect.width + 'px';
+            }
+            
+            function onStart(e) { isDragging = true; setPosition(e.touches ? e.touches[0].clientX : e.clientX); }
+            function onMove(e) { if (!isDragging) return; e.preventDefault(); setPosition(e.touches ? e.touches[0].clientX : e.clientX); }
+            function onEnd() { isDragging = false; }
+            
+            slider.addEventListener('mousedown', onStart);
+            slider.addEventListener('touchstart', onStart, { passive: false });
+            document.addEventListener('mousemove', onMove);
+            slider.addEventListener('touchmove', onMove, { passive: false });
+            document.addEventListener('mouseup', onEnd);
+            document.addEventListener('touchend', onEnd);
+            
+            function initSize() { overlayImg.style.width = slider.getBoundingClientRect().width + 'px'; }
+            const bgImg = slider.querySelector('.img-slider__bg');
+            if (bgImg.complete) initSize();
+            bgImg.addEventListener('load', initSize);
+            window.addEventListener('resize', initSize);
+        }, 100);
+
+    } else {
+        // Standard view
+        if (c.featured_image) {
+            document.getElementById('caseFeaturedImg').src = c.featured_image;
+            document.getElementById('caseFeaturedImg').alt = c.title;
+            document.getElementById('caseFeaturedImgSection').style.display = '';
+        }
+        if (images.length > 0) {
+            const gallerySection = document.getElementById('caseGallerySection');
+            gallerySection.style.display = '';
+            document.getElementById('caseGallery').innerHTML = images.map((url, i) =>
+                `<div class="case-detail-gallery__item">
+                    <img src="${esc(url)}" alt="${esc(c.title)} – image ${i + 2}" loading="lazy">
+                 </div>`
+            ).join('');
+        }
     }
 
     // Videos

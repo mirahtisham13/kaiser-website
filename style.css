@@ -2783,5 +2783,4 @@ a.case-card {
 [data-theme="dark"] .public-review-form input,
 [data-theme="dark"] .public-review-form textarea {
     background: var(--bg);
-    border-color: var(--border);
-}
+
