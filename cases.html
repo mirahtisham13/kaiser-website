@@ -112,15 +112,6 @@
     </div>
 </section>
 
-<!-- ===== CASE DETAIL MODAL ===== -->
-<div class="case-modal-backdrop" id="caseModal" role="dialog" aria-modal="true" aria-label="Case details">
-    <div class="case-modal">
-        <button class="case-modal__close" id="caseModalClose" aria-label="Close">×</button>
-        <div class="case-modal__body" id="caseModalBody">
-            <!-- Filled by JS -->
-        </div>
-    </div>
-</div>
 
 <!-- ===== APPOINTMENT CTA ===== -->
 <section class="appointment" id="appointment" style="margin-top:0;">
@@ -226,7 +217,6 @@ let activeCategory = 'all';
 document.addEventListener('DOMContentLoaded', async () => {
     await loadAllCases();
     initFilters();
-    initModal();
     initScrollAnimations();
 });
 
@@ -292,15 +282,6 @@ function renderGrid() {
 
     // Load more visibility
     lmWrap.style.display = filteredCases.length > visibleCount ? 'block' : 'none';
-
-    // Attach card click events
-    grid.querySelectorAll('.case-card').forEach(card => {
-        card.addEventListener('click', () => {
-            const id = card.dataset.id;
-            const caseItem = allCases.find(c => c.id === id);
-            if (caseItem) openModal(caseItem);
-        });
-    });
 }
 
 function loadMore() {
@@ -308,14 +289,14 @@ function loadMore() {
     renderGrid();
 }
 
-/* ---- Build case card HTML ---- */
+/* ---- Build case card HTML (links to individual case page) ---- */
 function buildCaseCard(c) {
     const img = c.featured_image
         ? `<img src="${esc(c.featured_image)}" alt="${esc(c.title)}" loading="lazy">`
-        : `<div class="case-card__no-image">🦷</div>`;
+        : `<div class="case-card__no-image">🦺</div>`;
 
     return `
-    <div class="case-card" data-id="${esc(c.id)}" role="button" tabindex="0" aria-label="View ${esc(c.title)}">
+    <a class="case-card" href="case.html?id=${esc(c.id)}" aria-label="View ${esc(c.title)}">
         <div class="case-card__image">${img}</div>
         <div class="case-card__body">
             ${c.category ? `<span class="case-card__tag">${esc(c.category)}</span>` : ''}
@@ -330,60 +311,9 @@ function buildCaseCard(c) {
         <div class="case-card__footer">
             <span class="case-card__link">View Case →</span>
         </div>
-    </div>`;
+    </a>`;
 }
 
-/* ---- Modal ---- */
-function initModal() {
-    const backdrop = document.getElementById('caseModal');
-    const closeBtn = document.getElementById('caseModalClose');
-
-    closeBtn.addEventListener('click', closeModal);
-    backdrop.addEventListener('click', (e) => { if (e.target === backdrop) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-}
-
-function openModal(c) {
-    const body = document.getElementById('caseModalBody');
-
-    // Build image gallery
-    const images = Array.isArray(c.images) ? c.images : [];
-    const galleryHtml = images.length > 0
-        ? `<div class="case-modal__gallery">
-               ${images.map((url, i) => `
-                   <div class="case-modal__gallery-item ${i === 0 ? 'case-modal__gallery-item--featured' : ''}">
-                       <img src="${esc(url)}" alt="${esc(c.title)} – image ${i+1}" loading="${i === 0 ? 'eager' : 'lazy'}">
-                   </div>`).join('')}
-           </div>`
-        : '';
-
-    body.innerHTML = `
-        <div class="case-modal__header">
-            ${c.category ? `<span class="case-modal__tag">${esc(c.category)}</span>` : ''}
-            <h2 class="case-modal__title">${esc(c.title)}</h2>
-            <div class="case-modal__meta">
-                ${c.treatment_type ? `<span>🩺 ${esc(c.treatment_type)}</span>` : ''}
-                ${c.patient_age    ? `<span>🧑 Patient Age: ${c.patient_age}</span>` : ''}
-                <span>📅 ${formatDate(c.created_at)}</span>
-            </div>
-        </div>
-        ${galleryHtml}
-        ${c.description ? `<div class="case-modal__description">${c.description}</div>` : ''}
-        <div class="case-modal__cta">
-            <a href="https://wa.me/917889439422?text=Hello%20I%20want%20to%20book%20an%20appointment"
-               target="_blank" rel="noopener noreferrer" class="btn btn--whatsapp btn--lg" style="width:100%; justify-content:center;">
-               💬 Book a Similar Treatment
-            </a>
-        </div>`;
-
-    document.getElementById('caseModal').classList.add('is-visible');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-    document.getElementById('caseModal').classList.remove('is-visible');
-    document.body.style.overflow = '';
-}
 
 /* ---- Scroll animations (same as main site) ---- */
 function initScrollAnimations() {

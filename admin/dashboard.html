@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard – Dr. Kaiser Admin</title>
     <meta name="robots" content="noindex, nofollow">
+    <!-- Dark mode flash prevention -->
+    <script>(function(){var t=localStorage.getItem('adminTheme');if(t==='dark')document.documentElement.setAttribute('data-admin-theme','dark');})()</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/admin.css">
@@ -31,12 +33,12 @@
             <a href="dashboard.html" class="sidebar__link is-active" id="nav-dashboard">
                 <span class="sidebar__link-icon">📊</span> Dashboard
             </a>
-            <a href="cases.html" class="sidebar__link" id="nav-cases">
+            <a href="hub.html"       class="sidebar__link"><span class="sidebar__link-icon">🎛️</span> Content Hub</a>
+            <a href="cases.html"     class="sidebar__link" id="nav-cases">
                 <span class="sidebar__link-icon">🦷</span> All Cases
             </a>
-            <a href="case-form.html" class="sidebar__link" id="nav-new">
-                <span class="sidebar__link-icon">➕</span> Add New Case
-            </a>
+            <a href="case-form.html"   class="sidebar__link"><span class="sidebar__link-icon">➕</span> Add New Case</a>
+            <a href="testimonials.html" class="sidebar__link"><span class="sidebar__link-icon">⭐</span> Testimonials</a>
 
             <div class="sidebar__divider"></div>
             <span class="sidebar__section-label">Site</span>
@@ -74,6 +76,9 @@
             <div class="topbar__right">
                 <a href="case-form.html" class="btn btn--primary btn--sm">➕ Add Case</a>
                 <a href="../index.html" target="_blank" rel="noopener" class="topbar__link">🌐 View Site</a>
+                <button class="admin-dark-toggle" onclick="toggleAdminTheme()" aria-label="Toggle dark mode">
+                    <span class="adt-sun">☀️</span><span class="adt-moon">🌙</span>
+                </button>
             </div>
         </header>
 
@@ -176,6 +181,12 @@
     function closeSidebar() {
         document.getElementById('sidebar').classList.remove('is-open');
         document.getElementById('sidebarOverlay').classList.remove('is-active');
+    }
+    function toggleAdminTheme() {
+        const html = document.documentElement;
+        const dark = html.getAttribute('data-admin-theme') === 'dark';
+        html.setAttribute('data-admin-theme', dark ? 'light' : 'dark');
+        localStorage.setItem('adminTheme', dark ? 'light' : 'dark');
     }
 </script>
 </body>

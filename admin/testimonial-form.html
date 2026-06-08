@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTabTitle">Add Review – Dr. Kaiser Admin</title>
+    <meta name="robots" content="noindex, nofollow">
+    <script>(function(){var t=localStorage.getItem('adminTheme');if(t==='dark')document.documentElement.setAttribute('data-admin-theme','dark');})()</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <a href="dashboard.html" class="sidebar__logo">
+            <div class="sidebar__logo-icon">🦷</div>
+            <div>
+                <span class="sidebar__logo-name">Dr. Kaiser's Dental</span>
+                <span class="sidebar__logo-sub">Admin Dashboard</span>
+            </div>
+        </a>
+        <nav class="sidebar__nav">
+            <span class="sidebar__section-label">Main</span>
+            <a href="dashboard.html"    class="sidebar__link"><span class="sidebar__link-icon">📊</span> Dashboard</a>
+            <a href="hub.html"          class="sidebar__link"><span class="sidebar__link-icon">🎛️</span> Content Hub</a>
+            <a href="cases.html"        class="sidebar__link"><span class="sidebar__link-icon">🦷</span> All Cases</a>
+            <a href="case-form.html"    class="sidebar__link"><span class="sidebar__link-icon">➕</span> Add New Case</a>
+            <a href="testimonials.html" class="sidebar__link is-active"><span class="sidebar__link-icon">⭐</span> Testimonials</a>
+            <div class="sidebar__divider"></div>
+            <span class="sidebar__section-label">Site</span>
+            <a href="../index.html"  class="sidebar__link" target="_blank" rel="noopener"><span class="sidebar__link-icon">🏠</span> View Homepage</a>
+            <a href="../cases.html"  class="sidebar__link" target="_blank" rel="noopener"><span class="sidebar__link-icon">📋</span> Public Cases Page</a>
+            <div class="sidebar__divider"></div>
+            <button class="sidebar__link sidebar__link--danger" onclick="logout()"><span class="sidebar__link-icon">🚪</span> Logout</button>
+        </nav>
+        <div class="sidebar__user">
+            <div class="sidebar__user-avatar" id="userInitial">A</div>
+            <div class="sidebar__user-info">
+                <div class="sidebar__user-label">Logged in as</div>
+                <div class="sidebar__user-email" id="adminEmail">Loading…</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main-wrapper">
+        <header class="topbar">
+            <div class="topbar__left">
+                <button class="topbar__menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h1 class="topbar__title" id="pageTitle">Add Review</h1>
+            </div>
+            <div class="topbar__right">
+                <a href="testimonials.html" class="topbar__link">← All Reviews</a>
+                <button class="admin-dark-toggle" onclick="toggleAdminTheme()" aria-label="Toggle dark mode">
+                    <span class="adt-sun">☀️</span><span class="adt-moon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <form id="testimonialForm" novalidate style="max-width:620px;">
+
+                <div class="card">
+                    <div class="card__header"><span class="card__title">Review Details</span></div>
+                    <div class="card__body">
+                        <div class="form-section" style="gap:18px;">
+
+                            <!-- Name -->
+                            <div class="form-group">
+                                <label class="form-label" for="tName">Patient Name <span class="req">*</span></label>
+                                <input type="text" class="form-control" id="tName" placeholder="e.g. Aisha Bhat" required maxlength="100">
+                            </div>
+
+                            <!-- Rating -->
+                            <div class="form-group">
+                                <label class="form-label">Star Rating</label>
+                                <div class="star-picker" id="starPicker" aria-label="Select rating">
+                                    <button type="button" class="star-btn" data-val="1" title="1 star">★</button>
+                                    <button type="button" class="star-btn" data-val="2" title="2 stars">★</button>
+                                    <button type="button" class="star-btn" data-val="3" title="3 stars">★</button>
+                                    <button type="button" class="star-btn" data-val="4" title="4 stars">★</button>
+                                    <button type="button" class="star-btn is-active" data-val="5" title="5 stars">★</button>
+                                </div>
+                                <input type="hidden" id="tRating" value="5">
+                            </div>
+
+                            <!-- Review Text -->
+                            <div class="form-group">
+                                <label class="form-label" for="tText">Review Text <span class="req">*</span></label>
+                                <textarea class="form-control" id="tText" rows="5"
+                                    placeholder="Write the patient's review here…" required maxlength="600"></textarea>
+                                <span class="form-hint"><span id="charCount">0</span> / 600 characters</span>
+                            </div>
+
+                            <!-- Source -->
+                            <div class="form-group">
+                                <label class="form-label">Source</label>
+                                <div class="status-picker" style="max-width:280px;">
+                                    <input type="radio" name="source" id="srcGoogle" value="google" checked>
+                                    <label for="srcGoogle">🔍 Google</label>
+                                    <input type="radio" name="source" id="srcDirect" value="direct">
+                                    <label for="srcDirect">✍️ Direct</label>
+                                </div>
+                            </div>
+
+                            <!-- Published toggle -->
+                            <div class="form-group">
+                                <label class="form-label">Visibility</label>
+                                <div class="toggle-row">
+                                    <label class="toggle">
+                                        <input type="checkbox" id="tPublished" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                    <label class="toggle-label" for="tPublished">Show on homepage immediately</label>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn--primary btn--lg" id="submitBtn">
+                                    ✅ Save Review
+                                </button>
+                                <a href="testimonials.html" class="btn btn--ghost btn--lg">Cancel</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/testimonials.js"></script>
+<script>
+let editId = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const session = await checkAuth();
+    if (!session) return;
+    await updateUserDisplay();
+
+    const params = new URLSearchParams(window.location.search);
+    editId = params.get('id') || null;
+
+    if (editId) {
+        document.getElementById('pageTitle').textContent = 'Edit Review';
+        document.getElementById('pageTabTitle').textContent = 'Edit Review – Dr. Kaiser Admin';
+        await loadForEdit(editId);
+    }
+
+    // Star picker
+    initStarPicker();
+
+    // Char counter
+    const textarea = document.getElementById('tText');
+    textarea.addEventListener('input', () => {
+        document.getElementById('charCount').textContent = textarea.value.length;
+    });
+
+    // Form submit
+    document.getElementById('testimonialForm').addEventListener('submit', handleSubmit);
+});
+
+function initStarPicker() {
+    const btns = document.querySelectorAll('.star-btn');
+    let selected = 5;
+
+    function highlight(val) {
+        btns.forEach(b => {
+            b.classList.toggle('is-active', parseInt(b.dataset.val) <= val);
+        });
+    }
+
+    btns.forEach(btn => {
+        btn.addEventListener('mouseenter', () => highlight(parseInt(btn.dataset.val)));
+        btn.addEventListener('mouseleave', () => highlight(selected));
+        btn.addEventListener('click', () => {
+            selected = parseInt(btn.dataset.val);
+            document.getElementById('tRating').value = selected;
+            highlight(selected);
+        });
+    });
+
+    highlight(selected);
+}
+
+async function loadForEdit(id) {
+    try {
+        const t = await fetchTestimonialById(id);
+        document.getElementById('tName').value = t.name || '';
+        document.getElementById('tText').value = t.text || '';
+        document.getElementById('tRating').value = t.rating || 5;
+        document.getElementById('tPublished').checked = !!t.is_published;
+        document.getElementById('charCount').textContent = (t.text || '').length;
+
+        const src = t.source === 'direct' ? 'srcDirect' : 'srcGoogle';
+        document.getElementById(src).checked = true;
+
+        // Update star display
+        const rating = t.rating || 5;
+        document.querySelectorAll('.star-btn').forEach(b => {
+            b.classList.toggle('is-active', parseInt(b.dataset.val) <= rating);
+        });
+    } catch (e) {
+        showToast('Failed to load review: ' + e.message, 'error');
+    }
+}
+
+async function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+
+    const name = document.getElementById('tName').value.trim();
+    const text = document.getElementById('tText').value.trim();
+    if (!name) { showToast('Please enter a patient name.', 'error'); return; }
+    if (!text) { showToast('Please enter a review.', 'error'); return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Saving…';
+
+    const payload = {
+        name,
+        text,
+        rating:       parseInt(document.getElementById('tRating').value) || 5,
+        source:       document.querySelector('input[name="source"]:checked')?.value || 'google',
+        avatar_letter: name.charAt(0).toUpperCase(),
+        is_published: document.getElementById('tPublished').checked
+    };
+
+    try {
+        if (editId) {
+            await updateTestimonial(editId, payload);
+            showToast('Review updated!', 'success');
+        } else {
+            await createTestimonial(payload);
+            showToast('Review saved!', 'success');
+        }
+        setTimeout(() => { window.location.href = 'testimonials.html'; }, 900);
+    } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+        btn.disabled = false;
+        btn.innerHTML = '✅ Save Review';
+    }
+}
+
+function showToast(msg, type = 'info') {
+    const c = document.getElementById('toastContainer');
+    const t = document.createElement('div');
+    t.className = `toast toast--${type}`;
+    t.innerHTML = `<span>${{success:'✅',error:'❌',info:'ℹ️'}[type]}</span><span>${msg}</span>`;
+    c.appendChild(t);
+    setTimeout(() => { t.classList.add('is-hiding'); setTimeout(() => t.remove(), 350); }, 3500);
+}
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('is-open'); document.getElementById('sidebarOverlay').classList.toggle('is-active'); }
+function closeSidebar()   { document.getElementById('sidebar').classList.remove('is-open'); document.getElementById('sidebarOverlay').classList.remove('is-active'); }
+function toggleAdminTheme() {
+    const html = document.documentElement;
+    const dark = html.getAttribute('data-admin-theme') === 'dark';
+    html.setAttribute('data-admin-theme', dark ? 'light' : 'dark');
+    localStorage.setItem('adminTheme', dark ? 'light' : 'dark');
+}
+</script>
+</body>
+</html>

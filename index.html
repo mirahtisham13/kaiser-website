@@ -423,80 +423,26 @@
                         class="testimonials__rating-link">Read all reviews on Google →</a>
                 </div>
             </div>
-            <div class="testimonials__grid" data-animate="fade-up">
-                <div class="testimonial-card">
-                    <div class="testimonial-card__header"><svg class="testimonial-card__google" width="18" height="18"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-                                fill="#4285F4" />
-                            <path
-                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                                fill="#34A853" />
-                            <path
-                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                                fill="#FBBC05" />
-                            <path
-                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                                fill="#EA4335" />
-                        </svg><span>Google Review</span></div>
+            <div class="testimonials__grid" id="testimonialsGrid" data-animate="fade-up">
+                <!-- Testimonials loaded dynamically from Supabase by script at bottom of page.
+                     Fallback hardcoded cards shown below if JS fails or DB has no reviews. -->
+                <div class="testimonial-card testimonial-fallback">
+                    <div class="testimonial-card__header"><svg class="testimonial-card__google" width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg><span>Google Review</span></div>
                     <div class="testimonial-card__stars">★★★★★</div>
-                    <p class="testimonial-card__text">"Great experience at Dr. Kaiser's clinic in Vilgam. Very
-                        professional, made me feel comfortable throughout the treatment. Highly recommended!"</p>
-                    <div class="testimonial-card__author">
-                        <div class="testimonial-card__avatar">R</div>
-                        <div><strong>Razia Khan</strong></div>
-                    </div>
+                    <p class="testimonial-card__text">"Great experience at Dr. Kaiser's clinic in Vilgam. Very professional, made me feel comfortable throughout the treatment. Highly recommended!"</p>
+                    <div class="testimonial-card__author"><div class="testimonial-card__avatar">R</div><div><strong>Razia Khan</strong></div></div>
                 </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-card__header"><svg class="testimonial-card__google" width="18" height="18"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-                                fill="#4285F4" />
-                            <path
-                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                                fill="#34A853" />
-                            <path
-                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                                fill="#FBBC05" />
-                            <path
-                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                                fill="#EA4335" />
-                        </svg><span>Google Review</span></div>
+                <div class="testimonial-card testimonial-fallback">
+                    <div class="testimonial-card__header"><svg class="testimonial-card__google" width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg><span>Google Review</span></div>
                     <div class="testimonial-card__stars">★★★★★</div>
-                    <p class="testimonial-card__text">"Such a kind and professional doctor. The clinic is clean and
-                        hygienic. I visited by chance and now this is my go-to dentist in Kashmir. Highly recommended!"
-                    </p>
-                    <div class="testimonial-card__author">
-                        <div class="testimonial-card__avatar">A</div>
-                        <div><strong>Aisha Asgar</strong></div>
-                    </div>
+                    <p class="testimonial-card__text">"Such a kind and professional doctor. The clinic is clean and hygienic. I visited by chance and now this is my go-to dentist in Kashmir. Highly recommended!"</p>
+                    <div class="testimonial-card__author"><div class="testimonial-card__avatar">A</div><div><strong>Aisha Asgar</strong></div></div>
                 </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-card__header"><svg class="testimonial-card__google" width="18" height="18"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-                                fill="#4285F4" />
-                            <path
-                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                                fill="#34A853" />
-                            <path
-                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                                fill="#FBBC05" />
-                            <path
-                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                                fill="#EA4335" />
-                        </svg><span>Google Review</span></div>
+                <div class="testimonial-card testimonial-fallback">
+                    <div class="testimonial-card__header"><svg class="testimonial-card__google" width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg><span>Google Review</span></div>
                     <div class="testimonial-card__stars">★★★★☆</div>
-                    <p class="testimonial-card__text">"Good experience overall. The doctor explained everything clearly
-                        and was very gentle. Clean clinic, fair prices. Would definitely recommend to anyone looking for
-                        a reliable dental clinic in Kashmir."</p>
-                    <div class="testimonial-card__author">
-                        <div class="testimonial-card__avatar">A</div>
-                        <div><strong>Aadil Rasool</strong></div>
-                    </div>
+                    <p class="testimonial-card__text">"Good experience overall. The doctor explained everything clearly and was very gentle. Clean clinic, fair prices. Would definitely recommend to anyone looking for a reliable dental clinic in Kashmir."</p>
+                    <div class="testimonial-card__author"><div class="testimonial-card__avatar">A</div><div><strong>Aadil Rasool</strong></div></div>
                 </div>
             </div>
             <div class="testimonials__cta" data-animate="fade-up">
@@ -726,7 +672,7 @@
 
             const grid = document.getElementById('fcGrid');
             grid.innerHTML = data.map(c => `
-                <a href="cases.html" class="fc-card">
+                <a href="case.html?id=${c.id}" class="fc-card">
                     <div class="fc-card__image">
                         ${c.featured_image
                             ? `<img src="${c.featured_image}" alt="${c.title}" loading="lazy">`
@@ -752,6 +698,50 @@
         } catch (e) {
             // Silently fail – the section stays hidden
             console.warn('Featured cases: could not load from Supabase.', e.message);
+        }
+    })();
+    </script>
+
+    <!-- Dynamic Testimonials from Supabase -->
+    <script>
+    (async function () {
+        try {
+            const SUPABASE_URL      = 'https://ynkqdkesohhhznjyazsp.supabase.co';
+            const SUPABASE_ANON_KEY = 'sb_publishable_eahhskoyTnpImscofH8XmQ_oDIosXiR';
+            const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+            const { data, error } = await db
+                .from('testimonials')
+                .select('id, name, rating, text, source, avatar_letter')
+                .eq('is_published', true)
+                .order('created_at', { ascending: false })
+                .limit(6);
+
+            if (error || !data || data.length === 0) return; // keep fallback cards
+
+            const stars = r => '★'.repeat(r || 5) + '☆'.repeat(5 - (r || 5));
+            const esc = s => { const d = document.createElement('div'); d.appendChild(document.createTextNode(s||'')); return d.innerHTML; };
+            const sourceLabel = src => src === 'google'
+                ? `<svg class="testimonial-card__google" width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg><span>Google Review</span>`
+                : `<span>✍️ Direct Review</span>`;
+
+            const grid = document.getElementById('testimonialsGrid');
+            if (!grid) return;
+
+            grid.innerHTML = data.map(t => `
+                <div class="testimonial-card">
+                    <div class="testimonial-card__header">${sourceLabel(t.source)}</div>
+                    <div class="testimonial-card__stars">${stars(t.rating)}</div>
+                    <p class="testimonial-card__text">&ldquo;${esc(t.text)}&rdquo;</p>
+                    <div class="testimonial-card__author">
+                        <div class="testimonial-card__avatar">${esc(t.avatar_letter || t.name.charAt(0).toUpperCase())}</div>
+                        <div><strong>${esc(t.name)}</strong></div>
+                    </div>
+                </div>`).join('');
+
+        } catch (e) {
+            // Silently fail – fallback hardcoded cards remain visible
+            console.warn('Testimonials: could not load from Supabase.', e.message);
         }
     })();
     </script>

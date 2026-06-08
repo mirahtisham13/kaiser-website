@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Cases – Dr. Kaiser Admin</title>
     <meta name="robots" content="noindex, nofollow">
+    <script>(function(){var t=localStorage.getItem('adminTheme');if(t==='dark')document.documentElement.setAttribute('data-admin-theme','dark');})()</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/admin.css">
@@ -56,12 +57,12 @@
             <a href="dashboard.html" class="sidebar__link">
                 <span class="sidebar__link-icon">📊</span> Dashboard
             </a>
+            <a href="hub.html"          class="sidebar__link"><span class="sidebar__link-icon">🎛️</span> Content Hub</a>
             <a href="cases.html" class="sidebar__link is-active">
                 <span class="sidebar__link-icon">🦷</span> All Cases
             </a>
-            <a href="case-form.html" class="sidebar__link">
-                <span class="sidebar__link-icon">➕</span> Add New Case
-            </a>
+            <a href="case-form.html"    class="sidebar__link"><span class="sidebar__link-icon">➕</span> Add New Case</a>
+            <a href="testimonials.html" class="sidebar__link"><span class="sidebar__link-icon">⭐</span> Testimonials</a>
             <div class="sidebar__divider"></div>
             <span class="sidebar__section-label">Site</span>
             <a href="../index.html" class="sidebar__link" target="_blank" rel="noopener">
@@ -94,6 +95,9 @@
             </div>
             <div class="topbar__right">
                 <a href="case-form.html" class="btn btn--primary btn--sm">➕ Add Case</a>
+                <button class="admin-dark-toggle" onclick="toggleAdminTheme()" aria-label="Toggle dark mode">
+                    <span class="adt-sun">☀️</span><span class="adt-moon">🌙</span>
+                </button>
             </div>
         </header>
 
@@ -250,6 +254,8 @@ function renderCasesTable(cases) {
             <td>
                 <div style="display:flex; gap:6px; justify-content:flex-end;">
                     <a href="case-form.html?id=${c.id}" class="btn btn--outline btn--sm">✏️ Edit</a>
+                    <a href="../case.html?id=${c.id}" target="_blank" class="btn btn--ghost btn--sm" title="View on public site">🔗 Live</a>
+                    <button class="btn btn--ghost btn--sm" onclick="copyLink('${c.id}')" title="Copy shareable link">📋 Copy</button>
                     <button class="btn btn--danger btn--sm" onclick="openDeleteModal('${c.id}', '${escHtml(c.title).replace(/'/g, "\\'")}')">
                         🗑️ Delete
                     </button>
@@ -351,6 +357,16 @@ function toggleSidebar() {
 function closeSidebar() {
     document.getElementById('sidebar').classList.remove('is-open');
     document.getElementById('sidebarOverlay').classList.remove('is-active');
+}
+function toggleAdminTheme() {
+    const html = document.documentElement;
+    const dark = html.getAttribute('data-admin-theme') === 'dark';
+    html.setAttribute('data-admin-theme', dark ? 'light' : 'dark');
+    localStorage.setItem('adminTheme', dark ? 'light' : 'dark');
+}
+function copyLink(id) {
+    const url = `${window.location.origin}/case.html?id=${id}`;
+    navigator.clipboard.writeText(url).then(() => showToast('Link copied! 📋', 'success'));
 }
 
 /* Close modal on backdrop click */

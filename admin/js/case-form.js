@@ -114,6 +114,11 @@ async function loadCaseForEdit(id) {
             quill.root.innerHTML = c.description;
         }
 
+        // Load existing videos
+        if (window.__setExistingVideos) {
+            window.__setExistingVideos(Array.isArray(c.videos) ? c.videos : []);
+        }
+
         // Load existing images
         existingImages = Array.isArray(c.images) ? [...c.images] : [];
         featuredUrl    = c.featured_image || null;
@@ -300,6 +305,19 @@ async function handleSubmit(e) {
             resolvedFeatured = allImageUrls[0];
         }
 
+        // 5b. Upload pending video files
+        let uploadedVideoUrls = [];
+        const videoState = window.__getVideoState ? window.__getVideoState() : { existingVideoUrls: [], pendingVideoFiles: [] };
+        for (const file of videoState.pendingVideoFiles) {
+            try {
+                const result = await uploadVideo(file);
+                uploadedVideoUrls.push(result.url);
+            } catch (e) {
+                console.warn('Video upload failed:', e.message);
+            }
+        }
+        const allVideoUrls = [...videoState.existingVideoUrls, ...uploadedVideoUrls];
+
         // 5. Collect form data
         const statusChecked = document.querySelector('input[name="status"]:checked');
         const status = forceDraft ? 'draft' : (statusChecked?.value || 'draft');
@@ -312,6 +330,7 @@ async function handleSubmit(e) {
             treatment_type: document.getElementById('treatmentType').value.trim() || null,
             images:         allImageUrls,
             featured_image: resolvedFeatured,
+            videos:         allVideoUrls,
             is_featured:    document.getElementById('isFeatured').checked,
             status
         };

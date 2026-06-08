@@ -1192,3 +1192,141 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 @media (min-width: 1280px) {
     .form-two-col { grid-template-columns: 1fr 360px; }
 }
+
+/* ================================================================
+   DARK MODE – Admin Dashboard
+================================================================ */
+[data-admin-theme="dark"] {
+    --bg:     #0f172a;
+    --card:   #1e293b;
+    --border: #334155;
+    --text:   #e2e8f0;
+    --text-l: #94a3b8;
+    --text-m: #64748b;
+    --ap-l:   rgba(37,99,235,.15);
+    --ap-100: rgba(37,99,235,.25);
+    --green-bg:  rgba(16,185,129,.15);
+    --yellow-bg: rgba(245,158,11,.15);
+    --red-bg:    rgba(239,68,68,.15);
+    --info-bg:   rgba(59,130,246,.15);
+}
+
+[data-admin-theme="dark"] body.admin-body { background: var(--bg); color: var(--text); }
+[data-admin-theme="dark"] .sidebar { background: #020617; }
+[data-admin-theme="dark"] .topbar { background: var(--card); border-color: var(--border); }
+[data-admin-theme="dark"] .topbar__title { color: var(--text); }
+[data-admin-theme="dark"] .topbar__link { color: var(--text-l); border-color: var(--border); }
+[data-admin-theme="dark"] .topbar__link:hover { background: rgba(37,99,235,.1); color: #93c5fd; border-color: #3b82f6; }
+[data-admin-theme="dark"] .card,
+[data-admin-theme="dark"] .modal { background: var(--card); border-color: var(--border); }
+[data-admin-theme="dark"] .card__header { border-color: var(--border); }
+[data-admin-theme="dark"] .stat-card { background: var(--card); border-color: var(--border); }
+[data-admin-theme="dark"] th { background: #0f172a; border-color: var(--border); color: var(--text-l); }
+[data-admin-theme="dark"] td { border-color: var(--border); color: var(--text); }
+[data-admin-theme="dark"] tbody tr:hover { background: #0f172a; }
+[data-admin-theme="dark"] .form-control { background: #0f172a; border-color: var(--border); color: var(--text); }
+[data-admin-theme="dark"] .form-control::placeholder { color: var(--text-m); }
+[data-admin-theme="dark"] .form-label { color: var(--text); }
+[data-admin-theme="dark"] .form-hint  { color: var(--text-l); }
+[data-admin-theme="dark"] .toggle-label { color: var(--text); }
+[data-admin-theme="dark"] .form-section-title { border-color: var(--border); }
+[data-admin-theme="dark"] .status-picker { border-color: var(--border); }
+[data-admin-theme="dark"] .status-picker label { color: var(--text-l); border-color: var(--border); }
+[data-admin-theme="dark"] .upload-zone { background: #0f172a; border-color: var(--border); }
+[data-admin-theme="dark"] .upload-zone:hover,
+[data-admin-theme="dark"] .upload-zone.is-dragging { background: rgba(37,99,235,.1); border-color: var(--ap); }
+[data-admin-theme="dark"] .image-preview { background: #0f172a; border-color: var(--border); }
+[data-admin-theme="dark"] .filter-bar .form-control { background: #0f172a; }
+[data-admin-theme="dark"] .modal-backdrop { background: rgba(0,0,0,.7); }
+[data-admin-theme="dark"] .modal__body { color: var(--text-l); }
+[data-admin-theme="dark"] .modal__close { color: var(--text-l); }
+[data-admin-theme="dark"] .modal__close:hover { color: var(--text); }
+[data-admin-theme="dark"] .toast { background: var(--card); color: var(--text); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+[data-admin-theme="dark"] .page-header__text p { color: var(--text-l); }
+[data-admin-theme="dark"] .loading-state { color: var(--text-l); }
+[data-admin-theme="dark"] .ql-toolbar.ql-snow  { background: #0f172a !important; border-color: var(--border) !important; }
+[data-admin-theme="dark"] .ql-container.ql-snow { border-color: var(--border) !important; }
+[data-admin-theme="dark"] .ql-editor { color: var(--text) !important; background: #0f172a !important; }
+[data-admin-theme="dark"] .ql-stroke { stroke: var(--text-l) !important; }
+[data-admin-theme="dark"] .ql-fill   { fill:   var(--text-l) !important; }
+[data-admin-theme="dark"] .ql-picker-label { color: var(--text-l) !important; }
+
+/* ---- Dark mode toggle button ---- */
+.admin-dark-toggle {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all var(--dur) var(--ease);
+    flex-shrink: 0;
+}
+.admin-dark-toggle:hover { border-color: var(--ap); background: var(--ap-l); }
+.adt-moon { display: none; }
+[data-admin-theme="dark"] .adt-sun  { display: none; }
+[data-admin-theme="dark"] .adt-moon { display: block; }
+
+/* ================================================================
+   STAR RATING PICKER – Testimonial form
+================================================================ */
+.star-picker { display: flex; gap: 4px; }
+
+.star-btn {
+    font-size: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #cbd5e1;
+    transition: color var(--dur) var(--ease), transform var(--dur) var(--ease);
+    padding: 2px;
+    line-height: 1;
+}
+.star-btn.is-active { color: #f59e0b; }
+.star-btn:hover { transform: scale(1.15); }
+
+/* ================================================================
+   VIDEO SECTION – case-form
+================================================================ */
+.video-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+
+.video-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--rs);
+    font-size: 13px;
+}
+
+.video-item__icon { font-size: 20px; flex-shrink: 0; }
+
+.video-item__label {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-l);
+}
+
+.video-item__remove {
+    background: none;
+    border: none;
+    color: var(--red);
+    cursor: pointer;
+    font-size: 16px;
+    flex-shrink: 0;
+    padding: 2px 6px;
+    border-radius: var(--rs);
+    transition: background var(--dur) var(--ease);
+}
+.video-item__remove:hover { background: var(--red-bg); }
+
+[data-admin-theme="dark"] .video-item { background: #0f172a; border-color: var(--border); }

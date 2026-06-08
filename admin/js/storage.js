@@ -74,3 +74,28 @@ function getImagePathFromUrl(url) {
     const idx = url.indexOf(marker);
     return idx !== -1 ? url.substring(idx + marker.length) : null;
 }
+
+/* ---- Video uploads ------------------------------------------ */
+const VIDEO_BUCKET = 'cases-videos';
+
+/**
+ * Upload a video file to the cases-videos Supabase Storage bucket.
+ * @param {File} file
+ * @returns {Promise<{path: string, url: string}>}
+ */
+async function uploadVideo(file) {
+    const ext      = file.name.split('.').pop().toLowerCase();
+    const filename = `videos/${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${ext}`;
+
+    const { data, error } = await supabaseClient.storage
+        .from(VIDEO_BUCKET)
+        .upload(filename, file, { cacheControl: '3600', upsert: false, contentType: file.type });
+
+    if (error) throw new Error(`Video upload failed: ${error.message}`);
+
+    const { data: { publicUrl } } = supabaseClient.storage
+        .from(VIDEO_BUCKET)
+        .getPublicUrl(filename);
+
+    return { path: filename, url: publicUrl };
+}

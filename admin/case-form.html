@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTabTitle">Add Case – Dr. Kaiser Admin</title>
     <meta name="robots" content="noindex, nofollow">
+    <script>(function(){var t=localStorage.getItem('adminTheme');if(t==='dark')document.documentElement.setAttribute('data-admin-theme','dark');})()</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Quill rich text editor -->
@@ -35,12 +36,12 @@
             <a href="dashboard.html" class="sidebar__link">
                 <span class="sidebar__link-icon">📊</span> Dashboard
             </a>
+            <a href="hub.html"          class="sidebar__link"><span class="sidebar__link-icon">🎛️</span> Content Hub</a>
             <a href="cases.html" class="sidebar__link">
                 <span class="sidebar__link-icon">🦷</span> All Cases
             </a>
-            <a href="case-form.html" class="sidebar__link is-active">
-                <span class="sidebar__link-icon">➕</span> Add New Case
-            </a>
+            <a href="case-form.html"   class="sidebar__link is-active"><span class="sidebar__link-icon">➕</span> Add New Case</a>
+            <a href="testimonials.html" class="sidebar__link"><span class="sidebar__link-icon">⭐</span> Testimonials</a>
             <div class="sidebar__divider"></div>
             <span class="sidebar__section-label">Site</span>
             <a href="../index.html" class="sidebar__link" target="_blank" rel="noopener">
@@ -73,6 +74,9 @@
             </div>
             <div class="topbar__right">
                 <a href="cases.html" class="topbar__link">← All Cases</a>
+                <button class="admin-dark-toggle" onclick="toggleAdminTheme()" aria-label="Toggle dark mode">
+                    <span class="adt-sun">☀️</span><span class="adt-moon">🌙</span>
+                </button>
             </div>
         </header>
 
@@ -157,7 +161,25 @@
                             <span class="form-hint" style="margin-top:4px;">Click ⭐ on any image to set it as the featured image.</span>
                         </div>
 
-                        <!-- Publish settings -->
+                            <!-- Videos -->
+                            <div class="form-group" style="margin-top:8px;">
+                                <label class="form-label">Videos (Optional)</label>
+                                <div style="display:flex; gap:8px; margin-bottom:8px;">
+                                    <input type="url" id="videoUrlInput" class="form-control"
+                                           placeholder="YouTube or Vimeo URL…">
+                                    <button type="button" class="btn btn--outline" onclick="addVideoUrl()" style="flex-shrink:0;">Add URL</button>
+                                </div>
+                                <div class="upload-zone" id="videoUploadZone" style="padding:18px 12px;" onclick="document.getElementById('videoFileInput').click()">
+                                    <div class="upload-zone__icon">🎬</div>
+                                    <div class="upload-zone__title">Or upload a video file</div>
+                                    <div class="upload-zone__hint">MP4, WebM up to 50 MB</div>
+                                    <input type="file" id="videoFileInput" accept="video/*" class="upload-zone__input" onchange="addVideoFile(this)">
+                                </div>
+                                <div class="video-list" id="videoList"></div>
+                                <span class="form-hint">YouTube/Vimeo URLs or direct uploads both work.</span>
+                            </div>
+
+                            <!-- Publish settings -->
                         <p class="form-section-title" style="margin-top:8px;">Publish Settings</p>
 
                         <!-- Status -->
@@ -186,19 +208,23 @@
                             </div>
                         </div>
 
-                        <!-- Form Actions -->
-                        <div class="form-actions" style="flex-direction:column;">
-                            <button type="submit" class="btn btn--primary btn--lg btn--block" id="submitBtn">
-                                ✅ Publish Case
-                            </button>
-                            <button type="submit" class="btn btn--outline btn--lg btn--block" id="draftBtn"
-                                    onclick="document.getElementById('statusDraft').checked=true">
-                                💾 Save as Draft
-                            </button>
-                            <a href="cases.html" class="btn btn--ghost btn--block" style="text-align:center;">
-                                Cancel
-                            </a>
-                        </div>
+                            <!-- Form Actions -->
+                            <div class="form-actions" style="flex-direction:column;">
+                                <button type="submit" class="btn btn--primary btn--lg btn--block" id="submitBtn">
+                                    ✅ Publish Case
+                                </button>
+                                <button type="submit" class="btn btn--outline btn--lg btn--block" id="draftBtn"
+                                        onclick="document.getElementById('statusDraft').checked=true">
+                                    💾 Save as Draft
+                                </button>
+                                <button type="button" class="btn btn--ghost btn--block" id="previewBtn"
+                                        style="display:none;" onclick="openPreview()">
+                                    👁 Preview
+                                </button>
+                                <a href="cases.html" class="btn btn--ghost btn--block" style="text-align:center;">
+                                    Cancel
+                                </a>
+                            </div>
 
                     </div><!-- /right column -->
                 </div><!-- /form-two-col -->
@@ -217,6 +243,62 @@
 <script src="js/cases.js"></script>
 <script src="js/case-form.js"></script>
 <script>
+    /* ---- Video state ---- */
+    let existingVideoUrls = [];   // saved in DB
+    let pendingVideoFiles = [];   // new file uploads
+
+    function addVideoUrl() {
+        const input = document.getElementById('videoUrlInput');
+        const url   = input.value.trim();
+        if (!url) return;
+        if (!url.startsWith('http')) { alert('Please enter a valid URL.'); return; }
+        existingVideoUrls.push(url);
+        renderVideoList();
+        input.value = '';
+    }
+
+    function addVideoFile(input) {
+        const file = input.files[0];
+        if (!file) return;
+        if (file.size > 52428800) { alert('Video must be under 50 MB.'); return; }
+        pendingVideoFiles.push(file);
+        renderVideoList();
+        input.value = '';
+    }
+
+    function removeVideo(idx, isPending) {
+        if (isPending) pendingVideoFiles.splice(idx, 1);
+        else existingVideoUrls.splice(idx, 1);
+        renderVideoList();
+    }
+
+    function renderVideoList() {
+        const list = document.getElementById('videoList');
+        const all  = [
+            ...existingVideoUrls.map((url, i) => ({ label: url, idx: i, pending: false })),
+            ...pendingVideoFiles.map((f,  i) => ({ label: f.name, idx: i, pending: true  }))
+        ];
+        if (all.length === 0) { list.innerHTML = ''; return; }
+        list.innerHTML = all.map(v => `
+            <div class="video-item">
+                <span class="video-item__icon">${v.pending ? '📁' : (v.label.includes('youtube') || v.label.includes('youtu.be') ? '▶️' : '🎬')}</span>
+                <span class="video-item__label" title="${v.label}">${v.label}</span>
+                <button type="button" class="video-item__remove" onclick="removeVideo(${v.idx}, ${v.pending})">✕</button>
+            </div>`).join('');
+    }
+
+    /* Expose video state so case-form.js can read it */
+    window.__getVideoState = () => ({ existingVideoUrls: [...existingVideoUrls], pendingVideoFiles: [...pendingVideoFiles] });
+    window.__setExistingVideos = (urls) => { existingVideoUrls = urls || []; renderVideoList(); };
+
+    /* ---- Preview (edit mode only) ---- */
+    function openPreview() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        if (id) window.open(`../case.html?id=${id}&preview=true`, '_blank');
+    }
+
+    /* ---- Sidebar + dark mode ---- */
     function toggleSidebar() {
         document.getElementById('sidebar').classList.toggle('is-open');
         document.getElementById('sidebarOverlay').classList.toggle('is-active');
@@ -225,12 +307,18 @@
         document.getElementById('sidebar').classList.remove('is-open');
         document.getElementById('sidebarOverlay').classList.remove('is-active');
     }
+    function toggleAdminTheme() {
+        const html = document.documentElement;
+        const dark = html.getAttribute('data-admin-theme') === 'dark';
+        html.setAttribute('data-admin-theme', dark ? 'light' : 'dark');
+        localStorage.setItem('adminTheme', dark ? 'light' : 'dark');
+    }
 
-    // Update tab title based on edit mode
+    /* ---- Edit mode setup ---- */
     const params = new URLSearchParams(window.location.search);
     if (params.get('id')) {
         document.getElementById('pageTabTitle').textContent = 'Edit Case – Dr. Kaiser Admin';
-        // sidebar active link update
+        document.getElementById('previewBtn').style.display = '';
         document.querySelector('.sidebar__link.is-active')?.classList.remove('is-active');
         document.querySelector('a[href="cases.html"]')?.classList.add('is-active');
     }
