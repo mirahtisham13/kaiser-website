@@ -24,7 +24,10 @@
 
     <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar" id="sidebar">
-        <a href="dashboard.html" class="sidebar__logo">
+        <a href="../index.html" target="_blank" rel="noopener" style="display:flex; align-items:center; gap:8px; padding:12px; color:var(--ap); text-decoration:none; font-weight:600; margin-bottom:8px; border-radius:8px; background:var(--ap-100);">
+            <span>🏠</span> View Homepage
+        </a>
+        <a href="cases.html" class="sidebar__logo">
             <div class="sidebar__logo-icon">🦷</div>
             <div>
                 <span class="sidebar__logo-name">Dr. Kaiser's Dental</span>
@@ -33,19 +36,17 @@
         </a>
         <nav class="sidebar__nav">
             <span class="sidebar__section-label">Main</span>
-            <a href="hub.html"          class="sidebar__link"><span class="sidebar__link-icon">🎛️</span> Content Hub</a>
             <a href="cases.html" class="sidebar__link">
                 <span class="sidebar__link-icon">🦷</span> All Cases
             </a>
-            <a href="case-form.html"   class="sidebar__link is-active"><span class="sidebar__link-icon">➕</span> Add New Case</a>
-            <a href="reviews.html"      class="sidebar__link"><span class="sidebar__link-icon">⭐</span> Reviews</a>
-            <div class="sidebar__divider"></div>
-            <span class="sidebar__section-label">Site</span>
-            <a href="../index.html" class="sidebar__link" target="_blank" rel="noopener">
-                <span class="sidebar__link-icon">🏠</span> View Homepage
+            <a href="case-form.html" class="sidebar__link is-active">
+                <span class="sidebar__link-icon">➕</span> Add Case
             </a>
-            <a href="../cases.html" class="sidebar__link" target="_blank" rel="noopener">
-                <span class="sidebar__link-icon">📋</span> Public Cases Page
+            <a href="reviews.html" class="sidebar__link">
+                <span class="sidebar__link-icon">⭐</span> Reviews
+            </a>
+            <a href="hub.html" class="sidebar__link">
+                <span class="sidebar__link-icon">🎛️</span> Editor
             </a>
             <div class="sidebar__divider"></div>
             <button class="sidebar__link sidebar__link--danger" onclick="logout()">
